@@ -1,0 +1,10 @@
+These libraries are not part of Fram, but are used by it. They are provided as
+a convenience so you don't have to go searching for them.  However, they are not
+covered by the software licence for Fram but instead have their own licences.
+These are:
+
+package                   Licence   URL of package
+-------                   -------   --------------
+sqlite-jdbc-3.23.1.jar    Apache    https://github.com/xerial/sqlite-jdbc
+xmpcore.jar               BSD       https://www.adobe.com/devnet/xmp.html
+metadata-extractor.jar    Apache    https://github.com/drewnoakes/metadata-extractor

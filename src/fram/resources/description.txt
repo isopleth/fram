@@ -1,0 +1,71 @@
+This program copies directory trees of graphics files to a new directory tree 
+suitable for displaying on a photoframe device.
+
+Arguments are <input dir> <output dir>
+
+Input dir is a pre-existing directory tree containing the input files. Only .JPG,
+.jpg (i.e. any case) etc Jpeg format files are processed, all others are skipped.
+
+Output dir is a pre-existing directory where the files for the photoframe are to
+be copied to.  This is typically the name of the USB or SD device which is going to
+be plugged into the photoframe.  The alphabetical order of the files in the output
+directory is jumbled up so that photos are displayed in a random order.
+
+To make human navigation of the output tree easier, for example if your operating
+system tries to display thumbnails, it is split into subdirectories
+containing 100 files each.  Doing things this way means that there are not
+thousands of files for the operating system to have to display in any directory.
+The directories have numeric names, such as 000010, 000011, etc.
+Within them, the files also have numeric names such as 000001.jpg, 000002.jpg
+
+IF the output directory tree only contains files with these names (and thumbs.db)
+then the entire tree is deleted before the new images are put into the tree.  If
+the tree contains any file which doesn't match this name then the tree is not 
+deleted.
+
+The program currently supports about a million image files, although in practice
+I use it with a few tens of thousands.
+
+The image is copied into the output directory tree and the original containing
+directory written at the top of the output image.
+
+
+The command line switches are as follows. They are all case-insensitive.
+
+--check
+
+This counts the number of files in the input directory tree and does not run
+the copying code if the number has not changed since last time it was run.
+This is intended for using the program in a batch job, where the program is
+regularly run but only has to regenerate the output tree if something has
+changed.  The check number is contained in the current directory, in a file called
+checkfile.txt.
+
+--date
+
+Add the date that the photo was taken to the annotation.  This works for digital
+photos but if the photo has been scanned from a negative then the date, if any,
+will have been written by the device which scanned the photos and so will not
+relate to the date that the picture was taken.
+
+--nodirectory
+
+Suprressing adding the directory name text to the output file.
+
+--norotate
+
+Do not rotate the output file. If not specified the image is rotated according
+to the exiff information about the image orientation found in the input file.
+
+--showfilename
+
+This adds text to the bottom left corner of the output images which specifies
+their original filenames.  It is useful for tracking down an image which needs
+modifying or fixing in some way.
+
+--verbose
+
+This produces more logging output than usual.
+
+
+
