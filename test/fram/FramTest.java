@@ -197,7 +197,7 @@ public class FramTest {
      * Test checking if the output directory needs regenerating
      */
     @Test
-    public void testCheck() {
+    public void testCheckOption() {
         announce("test check output dir needs regenerating");
         subAnnounce("Delete check file, if it exists");
         String name = CheckProgramNeedsRunning.generateName(inputDirectory);

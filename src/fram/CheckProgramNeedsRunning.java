@@ -69,7 +69,7 @@ final class CheckProgramNeedsRunning implements FileVisitor<Path> {
             }
             text = stringBuilder.toString();
         } catch (FileNotFoundException ex) {
-            System.out.println("Check file not found");
+            System.out.println(String.format("Check file %s not found", checkFile));
         } catch (IOException ex) {
             Logger.getLogger(CheckProgramNeedsRunning.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
@@ -157,10 +157,11 @@ final class CheckProgramNeedsRunning implements FileVisitor<Path> {
             return "check.txt";
         }
     }
-    
+
     /**
-     * Test if the objet has detected that the input directoruy has changed.
-     * Used for unit tests.
+     * Test if the objet has detected that the input directory has changed. Used
+     * for unit tests.
+     *
      * @return true if it has changed
      */
     public boolean getChangedFlag() {

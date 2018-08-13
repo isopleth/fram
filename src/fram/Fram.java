@@ -10,6 +10,7 @@ import java.util.logging.Logger;
  */
 public class Fram {
 
+    private static final String VERSION = "1.000";
     private static final Logger logger = Logger.getLogger(Fram.class.getName());
     ProcessFiles processFiles;
 
@@ -28,6 +29,7 @@ public class Fram {
      */
     public boolean runProgram(String[] args) {
 
+        System.out.println(VERSION);
         RunningLock lock = new RunningLock();
         if (lock.alreadyLocked()) {
             System.out.println("Already running");

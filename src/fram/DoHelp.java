@@ -12,6 +12,9 @@ class DoHelp {
 
     private static final String NAME = "resources/description.txt";
 
+    /**
+     * Display the contents of the help file
+     */
     public void help() {
         InputStream stream = getClass().getResourceAsStream(NAME);
         if (stream == null) {
