@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigInteger;
+import java.nio.ByteBuffer;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.logging.Level;
@@ -48,6 +49,12 @@ public class Hash {
             // Add in the filename
             byte[] fileNameChars = inputFile.getAbsolutePath().getBytes();
             digest.update(fileNameChars, 0, fileNameChars.length);
+            // Add in the image orientation exif data as if this is changed then
+            // the output file needs to be regenerated
+            int ordinal = FileCopier.getRotation(inputFile.toPath()).ordinal();
+            ByteBuffer byteBuffer = ByteBuffer.allocate(4).putInt(ordinal);
+            byte[] orientationArray = byteBuffer.array();
+            digest.update(orientationArray, 0, orientationArray.length);
 
             byte[] hash = digest.digest();
             BigInteger bigInt = new BigInteger(1, hash);

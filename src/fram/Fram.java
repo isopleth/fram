@@ -5,14 +5,18 @@ import java.util.logging.Logger;
 
 /**
  * Copies .jpg files onto a memory stick for displaying on a photo frame device.
+ * 
+ * Version history:
+ * 1.000 - Original
+ * 1.001 - Cache and unit tests know about image orientations
  *
  * @author Jason Leake
  */
 public class Fram {
 
-    private static final String VERSION = "1.000";
+    private static final String VERSION = "1.001";
     private static final Logger logger = Logger.getLogger(Fram.class.getName());
-    ProcessFiles processFiles;
+    private ProcessFiles processFiles;
 
     /**
      * @param args the command line arguments
@@ -28,8 +32,11 @@ public class Fram {
      * @return true if successful
      */
     public boolean runProgram(String[] args) {
-
-        System.out.println(VERSION);
+        System.out.println("Program version " + VERSION);
+        // This is maintained for the unit tests which use it
+        RotationCounter.reset();
+        // Guard against two instances of the same program running out of
+        // the same directory at the same time
         RunningLock lock = new RunningLock();
         if (lock.alreadyLocked()) {
             System.out.println("Already running");

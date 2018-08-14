@@ -119,6 +119,7 @@ public class FramTest {
                 }
             }
             assertTrue("No missing files", expectedfiles.isEmpty());
+
             // Now remove the output files next time we run a test
             testHasBeenRun = true;
         } catch (Exception ex) {
@@ -126,7 +127,24 @@ public class FramTest {
             ex.printStackTrace();
         }
     }
-    
+
+    /**
+     * check the rotations are as expected
+     *
+     * @param counts array of expected rotation for each orientation change
+     */
+    private void checkRotations(int[] counts) {
+        String actualRotations = RotationCounter.getRotationCounts();
+        String expectedRotations = RotationCounter.makeRotationCounts(counts);
+        if (!actualRotations.equals(expectedRotations)) {
+            System.out.println("Actual: " + actualRotations);
+            System.out.println("Expected: " + expectedRotations);
+
+        }
+        assertTrue("Rotations as expected", actualRotations.equals(expectedRotations));
+
+    }
+
     /**
      * Print title of test in slightly fancy style
      *
@@ -162,7 +180,7 @@ public class FramTest {
         }
         System.out.println();
     }
-    
+
     /**
      * Test with cache enabled
      */
@@ -172,8 +190,13 @@ public class FramTest {
         Cache.deleteCache();
         subAnnounce("Run program with caching but no cache");
         run(new String[]{inputDirectory, outputDirectory, "--verbose", "--cache"});
+        int[] counts = {9, 0, 0, 0, 1, 0, 0, 0, 0};
+        checkRotations(counts);
         subAnnounce("Run program with caching but cache exists");
         run(new String[]{inputDirectory, outputDirectory, "--verbose", "--cache"});
+        // Nothing will be rotated because the files all come from the cache
+        int[] counts1 = {0, 0, 0, 0, 0, 0, 0, 0, 0};
+        checkRotations(counts1);
         subAnnounce("Test cache clean");
         announce("test cache clean");
         Cache cache = new Cache();
@@ -191,6 +214,8 @@ public class FramTest {
         announce("test no cache");
         // Run program without caching
         run(new String[]{inputDirectory, outputDirectory, "--verbose"});
+        int[] counts = {9, 0, 0, 0, 1, 0, 0, 0, 0};
+        checkRotations(counts);
     }
 
     /**

@@ -10,9 +10,9 @@ class Options {
     public boolean verbose;
     public boolean check;
     public boolean showFilename;
-    public boolean norotate;
+    public boolean rotateImages;
     public boolean showDate;
-    public boolean nodirectory;
+    public boolean addDirectoryName;
     public boolean cache;
 
     /**
@@ -25,9 +25,9 @@ class Options {
         cache = inOptions.cache;
         check = inOptions.check;
         showFilename = inOptions.showFilename;
-        norotate = inOptions.norotate;
+        rotateImages = inOptions.rotateImages;
         showDate = inOptions.showDate;
-        nodirectory = inOptions.nodirectory;
+        addDirectoryName = inOptions.addDirectoryName;
     }
 
     /**
@@ -37,9 +37,9 @@ class Options {
         verbose = false;
         check = false;
         showFilename = false;
-        norotate = false;
+        rotateImages = true;
         showDate = false;
-        nodirectory = false;
+        addDirectoryName = true;
         cache = false;
     }
 
@@ -66,7 +66,7 @@ class Options {
             found = true;
             System.out.println("   Ony run main processing if number of input files changed");
         } else if (arg.equalsIgnoreCase("--norotate")) {
-            norotate = true;
+            rotateImages = false;
             found = true;
             System.out.println("   Don't rotate output files according to their metadata");
         } else if (arg.equalsIgnoreCase("--showfilenames")) {
@@ -78,7 +78,7 @@ class Options {
             found = true;
             System.out.println("   Annotate images with date in image file");
         } else if (arg.equalsIgnoreCase("--nodirectory")) {
-            nodirectory = true;
+            addDirectoryName = false;
             found = true;
             System.out.println("   Do not annotate images with directory name");
         } else if (arg.startsWith("--")) {

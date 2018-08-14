@@ -26,6 +26,7 @@ import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 
 /**
+ * This class does file copying, including rotating and flipping the image.
  *
  * @author Jason Leake
  */
@@ -38,6 +39,7 @@ class FileCopier {
     private static final String COPY_LIST_FILE = "copy_list.txt";
     private final Cache theCache;
     private final static String CLASSNAME = FileCopier.class.getName();
+    // This is used by the unit tests
 
     /**
      * Constructor
@@ -56,7 +58,6 @@ class FileCopier {
                 copyListFile = null;
             }
         } else {
-
             copyListFile = null;
         }
     }
@@ -166,8 +167,7 @@ class FileCopier {
             BufferedImage image = ImageIO.read(imagePath);
 
             // Rotate the image if necessary
-            if (!theConfiguration.norotate()) {
-            } else {
+            if (theConfiguration.rotateImages()) {
                 Orientation imageOrientation = getRotation(originalFile);
                 switch (imageOrientation) {
 
@@ -202,12 +202,12 @@ class FileCopier {
                         image = ManipulateImage.rotate(ManipulateImage.mirror(image), -1);
                         break;
                 }
+                RotationCounter.bump(imageOrientation);
             }
 
             int width = image.getWidth();
             if (image.getType() != BufferedImage.TYPE_3BYTE_BGR) {
                 image = ManipulateImage.make3ByteBgr(image);
-
             }
 
             final int MIN_WIDTH = 2048;

@@ -180,8 +180,8 @@ class Configuration {
      *
      * @return true if flag is set
      */
-    public boolean norotate() {
-        return options.norotate;
+    public boolean rotateImages() {
+        return options.rotateImages;
     }
 
     /**
@@ -199,7 +199,7 @@ class Configuration {
      * @return true if directory is to be shown
      */
     public boolean annotateImageWithDirectory() {
-        return !options.nodirectory;
+        return options.addDirectoryName;
     }
 
     /**
