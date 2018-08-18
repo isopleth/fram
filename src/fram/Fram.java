@@ -5,16 +5,20 @@ import java.util.logging.Logger;
 
 /**
  * Copies .jpg files onto a memory stick for displaying on a photo frame device.
+ *
+ * Version history: 
  * 
- * Version history:
  * 1.000 - Original
- * 1.001 - Cache and unit tests know about image orientations
+ *
+ * 1.001 - Cache and unit tests know about
+ *
+ * 1.002 - Allow user to set minimum image size
  *
  * @author Jason Leake
  */
 public class Fram {
 
-    private static final String VERSION = "1.001";
+    private static final String VERSION = "1.002";
     private static final Logger logger = Logger.getLogger(Fram.class.getName());
     private ProcessFiles processFiles;
 
@@ -95,14 +99,13 @@ public class Fram {
                 && configuration.setOptions(options);
         System.out.print(configuration.getErrorMessage());
         if (ok) {
-
             processFiles = new ProcessFiles(configuration);
             processFiles.run();
-
             System.out.println("Files copied:    " + processFiles.getCopyCount()
                     + "   Files skipped:    " + processFiles.getSkippedCount()
                     + "   Directory trees skipped:    " + processFiles.getSkippedDirCount());
 
+            System.out.println("Rotations - " + RotationCounter.getRotationCounts());
             System.out.println("Finishing at " + DateAndTimeNow.get());
             timer.reportElapsedTime("Complete");
         }

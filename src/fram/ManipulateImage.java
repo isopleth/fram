@@ -8,13 +8,14 @@ import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 
 /**
+ * Set of static methods for manipulating images
  *
- * @author user
+ * @author Jason Leake
  */
 public class ManipulateImage {
 
     /**
-     * Mirror the image along the vertical centreline asix
+     * Mirror the image along the vertical centre line axis
      *
      * @param image the input image
      * @return the modified image
@@ -40,7 +41,7 @@ public class ManipulateImage {
      * @return resized image
      */
     static BufferedImage resizeImage(BufferedImage image, int newWIdth) {
- 
+
         int newHeight = image.getHeight() * newWIdth / image.getWidth();
         BufferedImage resizedImage = new BufferedImage(newWIdth, newHeight, image.getType());
         Graphics2D g = resizedImage.createGraphics();
@@ -88,8 +89,8 @@ public class ManipulateImage {
     /**
      * Convert image to 3 byte blue-green-red format
      *
-     * @param image
-     * @return new image
+     * @param image image to read for conversion
+     * @return new converted image
      */
     static BufferedImage make3ByteBgr(BufferedImage image) {
         // Convert monochrome etc images to 3 byte BGR

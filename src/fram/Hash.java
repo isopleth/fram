@@ -51,7 +51,7 @@ public class Hash {
             digest.update(fileNameChars, 0, fileNameChars.length);
             // Add in the image orientation exif data as if this is changed then
             // the output file needs to be regenerated
-            int ordinal = FileCopier.getRotation(inputFile.toPath()).ordinal();
+            int ordinal = FileCopier.getOrientation(inputFile.toPath()).ordinal();
             ByteBuffer byteBuffer = ByteBuffer.allocate(4).putInt(ordinal);
             byte[] orientationArray = byteBuffer.array();
             digest.update(orientationArray, 0, orientationArray.length);

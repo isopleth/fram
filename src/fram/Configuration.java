@@ -1,5 +1,13 @@
 package fram;
 
+import static fram.Options.Option.CACHE;
+import static fram.Options.Option.CHECK;
+import static fram.Options.Option.MINIMUM_WIDTH;
+import static fram.Options.Option.NO_DIRECTORY_NAME;
+import static fram.Options.Option.NO_ROTATE_IMAGES;
+import static fram.Options.Option.SHOW_DATE;
+import static fram.Options.Option.SHOW_FILENAME;
+import static fram.Options.Option.VERBOSE;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
@@ -142,7 +150,7 @@ class Configuration {
      * @return true if verbose mode, false if quiet mode
      */
     public boolean isVerboseMode() {
-        return options.verbose;
+        return options.get(VERBOSE) != 0;
     }
 
     /**
@@ -152,18 +160,7 @@ class Configuration {
      * @return flag value
      */
     public boolean checkFirst() {
-        return options.check;
-    }
-
-    /**
-     * Set the command line options
-     *
-     * @param options options
-     * @return true always, indicating success
-     */
-    public boolean setOptions(Options inOptions) {
-        options = new Options(inOptions);
-        return true;
+        return options.get(CHECK) != 0;
     }
 
     /**
@@ -172,7 +169,7 @@ class Configuration {
      * @return true if flag set, false if not
      */
     public boolean getShowFilename() {
-        return options.showFilename;
+        return options.get(SHOW_FILENAME) != 0;
     }
 
     /**
@@ -180,8 +177,8 @@ class Configuration {
      *
      * @return true if flag is set
      */
-    public boolean rotateImages() {
-        return options.rotateImages;
+    public boolean doNotRotateImages() {
+        return options.get(NO_ROTATE_IMAGES) != 0;
     }
 
     /**
@@ -190,7 +187,7 @@ class Configuration {
      * @return true if date is to be shown
      */
     public boolean getShowDate() {
-        return options.showDate;
+        return options.get(SHOW_DATE) != 0;
     }
 
     /**
@@ -199,7 +196,7 @@ class Configuration {
      * @return true if directory is to be shown
      */
     public boolean annotateImageWithDirectory() {
-        return options.addDirectoryName;
+        return options.get(NO_DIRECTORY_NAME) != 0;
     }
 
     /**
@@ -208,7 +205,26 @@ class Configuration {
      * @return true if cache is enabled
      */
     boolean getCache() {
-        return options.cache;
+        return options.get(CACHE) != 0;
+    }
+
+    /**
+     * Get minimum output image width
+     *
+     * @return minimum width in pixels
+     */
+    public int getMinimumWidth() {
+        return options.get(MINIMUM_WIDTH);
+    }
+
+    /**
+     * Set the options to the specified set of options
+     * @param newOptions the new options
+     * @return true always, as always successful
+     */
+    boolean setOptions(Options newOptions) {
+        options = newOptions;
+        return true;
     }
 
 }

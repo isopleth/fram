@@ -74,7 +74,7 @@ class Walker implements FileVisitor<Path> {
         } else {
             System.out.println("Copying files");
             Files.walkFileTree(theConfiguration.getInputPath(), this);
-            fileCopier.compact();
+            fileCopier.compactOutputFiles();
             while (fileCopier.copy()) {
                 if (++copyCount % 100 == 0) {
                     System.out.println(String.format("%d files copied at %s",
@@ -138,7 +138,7 @@ class Walker implements FileVisitor<Path> {
                     System.out.println(String.format("Skipped %s", file.toString()));
                     skippedCount++;
                 } else {
-                    fileCopier.add(outputFileIndexGenerator.getNextfilenameToUse(), file);
+                    fileCopier.addAnotherFile(outputFileIndexGenerator.getNextfilenameToUse(), file);
                 }
             }
         }

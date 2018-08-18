@@ -59,14 +59,14 @@ class RotationCounter {
     static String makeRotationCounts(int[] counts) {
         if (counts.length != Orientation.values().length) {
             return "bad length";
-
         }
         String returnValue = "";
         int index = 0;
         for (Orientation orientation : Orientation.values()) {
-
-            returnValue += orientation.name() + " ";
-
+            if (index > 0) {
+                returnValue += " ";
+            }
+            returnValue += orientation.name().toLowerCase() + " ";
             returnValue += Integer.toString(counts[index++]);
 
         }

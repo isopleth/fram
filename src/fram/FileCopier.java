@@ -68,7 +68,7 @@ class FileCopier {
      * @param file file to copy
      * @param dest directory to copy it to
      */
-    public void add(int index, Path file) {
+    public void addAnotherFile(int index, Path file) {
         fileMap.put(index, file);
     }
 
@@ -76,7 +76,7 @@ class FileCopier {
      * Compact the list of output files so that there are no gaps in the
      * sequence of names
      */
-    public void compact() {
+    public void compactOutputFiles() {
         SortedMap<Integer, Path> newMap = new TreeMap<>();
         int newIndex = 0;
         for (int index : fileMap.keySet()) {
@@ -167,8 +167,8 @@ class FileCopier {
             BufferedImage image = ImageIO.read(imagePath);
 
             // Rotate the image if necessary
-            if (theConfiguration.rotateImages()) {
-                Orientation imageOrientation = getRotation(originalFile);
+            if (!theConfiguration.doNotRotateImages()) {
+                Orientation imageOrientation = getOrientation(originalFile);
                 switch (imageOrientation) {
 
                     case NONE:
@@ -210,9 +210,9 @@ class FileCopier {
                 image = ManipulateImage.make3ByteBgr(image);
             }
 
-            final int MIN_WIDTH = 2048;
-            if (width < MIN_WIDTH) {
-                image = ManipulateImage.resizeImage(image, MIN_WIDTH);
+            final int minimumWidth = theConfiguration.getMinimumWidth();
+            if (width < minimumWidth) {
+                image = ManipulateImage.resizeImage(image, minimumWidth);
             }
 
             Graphics2D graphics2d = image.createGraphics();
@@ -272,12 +272,13 @@ class FileCopier {
     }
 
     /**
-     * Get Exif information indicating whether the image war rotated
+     * Get Exif information indicating whether the image was rotated and what
+     * the orientation is
      *
      * @param imagePath image path
      * @return rotation type
      */
-    static public Orientation getRotation(Path imagePath) {
+    static public Orientation getOrientation(Path imagePath) {
         int value = 1; // Defaut to no rotation if orientation exif not present
         try {
             Metadata metadata = JpegMetadataReader.readMetadata(imagePath.toFile());
