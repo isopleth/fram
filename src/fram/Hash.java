@@ -19,9 +19,16 @@ import java.util.logging.Logger;
 public class Hash {
 
     private static MessageDigest digest = null;
+    private static Configuration theConfiguration;
     private static String CLASSNAME = Hash.class.getName();
 
-    Hash() throws NoSuchAlgorithmException {
+    /**
+     * Constructor Re-uses message digest class.
+     *
+     * @throws NoSuchAlgorithmException
+     */
+    Hash(Configuration config) throws NoSuchAlgorithmException {
+        theConfiguration = config;
         if (digest == null) {
             digest = MessageDigest.getInstance("SHA-256");
         } else {
@@ -49,13 +56,22 @@ public class Hash {
             // Add in the filename
             byte[] fileNameChars = inputFile.getAbsolutePath().getBytes();
             digest.update(fileNameChars, 0, fileNameChars.length);
+
             // Add in the image orientation exif data as if this is changed then
-            // the output file needs to be regenerated
+            // the output file needs to be regenerated.  Someone might have spotted
+            // that the input file is upside down and fixed that etc.
             int ordinal = FileCopier.getOrientation(inputFile.toPath()).ordinal();
             ByteBuffer byteBuffer = ByteBuffer.allocate(4).putInt(ordinal);
             byte[] orientationArray = byteBuffer.array();
             digest.update(orientationArray, 0, orientationArray.length);
 
+            // Add in the width setting.  If this has changed then
+            // the output file might need to be regenerated
+            byteBuffer = ByteBuffer.allocate(4).putInt(theConfiguration.getMinimumWidth());
+            byte[] minimumWidthArray = byteBuffer.array();
+            digest.update(minimumWidthArray, 0, minimumWidthArray.length);
+
+            // Now convert the hash to a string
             byte[] hash = digest.digest();
             BigInteger bigInt = new BigInteger(1, hash);
             output = bigInt.toString(16);

@@ -11,11 +11,12 @@ import java.util.Map;
 class Options {
 
     enum Option {
-        VERBOSE, CHECK, SHOW_FILENAME, NO_ROTATE_IMAGES, SHOW_DATE, NO_DIRECTORY_NAME, CACHE, MINIMUM_WIDTH;
+        VERBOSE, CHECK, SHOW_FILENAME, NO_ROTATE_IMAGES, SHOW_DATE,
+        NO_DIRECTORY_NAME, CACHE, MINIMUM_WIDTH;
         private static final Map<String, Option> keywords = new HashMap<>();
 
         static {
-
+            // These must all be lower case
             keywords.put("--verbose", VERBOSE);
             keywords.put("--check", CHECK);
             keywords.put("--showfilenames", SHOW_FILENAME);
@@ -23,7 +24,7 @@ class Options {
             keywords.put("--date", SHOW_DATE);
             keywords.put("--nodirectory", NO_DIRECTORY_NAME);
             keywords.put("--cache", CACHE);
-            keywords.put("--minimumWidth", MINIMUM_WIDTH);
+            keywords.put("--minimumwidth", MINIMUM_WIDTH);
 
         }
 
@@ -49,6 +50,12 @@ class Options {
             }
         }
 
+        /**
+         * Convert keyword to option enumeration
+         *
+         * @param keyword keyword to check
+         * @return option enumeration, or null if there isn't one
+         */
         public static Option keywordToOption(String keyword) {
             keyword = keyword.toLowerCase();
             if (keywords.containsKey(keyword)) {
@@ -72,8 +79,7 @@ class Options {
         options.put(Option.SHOW_DATE, 0);
         options.put(Option.NO_DIRECTORY_NAME, 1);
         options.put(Option.CACHE, 0);
-        options.put(Option.MINIMUM_WIDTH, 4096);
-
+        options.put(Option.MINIMUM_WIDTH, 2048);
     }
 
     /**
@@ -115,7 +121,7 @@ class Options {
                 found = true;
             } else {
 
-                System.out.print("Unrecognised option " + arg);
+                System.out.print("    Unrecognised option " + arg);
             }
 
         }

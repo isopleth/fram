@@ -142,7 +142,7 @@ class FileCopier {
         String hash = null;
         if (theCache != null) {
             try {
-                hash = new Hash().smoke(originalFile.toFile());
+                hash = new Hash(theConfiguration).smoke(originalFile.toFile());
                 Path cachedFile = theCache.getCachedFile(originalFile, hash);
                 if (cachedFile != null) {
                     // There is a cached file all ready so no need to process

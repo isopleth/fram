@@ -223,7 +223,7 @@ public class FramTest {
      */
     @Test
     public void testCheckOption() {
-        announce("test check output dir needs regenerating");
+        announce("test check output directory needs regenerating");
         subAnnounce("Delete check file, if it exists");
         String name = CheckProgramNeedsRunning.generateName(inputDirectory);
         File checkFile = new File(System.getProperty("user.dir"), name);
@@ -238,6 +238,31 @@ public class FramTest {
         fram = new Fram();
         fram.runProgram(new String[]{inputDirectory, outputDirectory, "--verbose", "--check"});
         assertFalse("Renegerated files", fram.getProcessor().getChecker().getChangedFlag());
+    }
+
+    /**
+     * Test checking if the output directory needs regenerating
+     */
+    @Test
+    public void testMinimumWidthOption() {
+        announce("Test \"minimum width\" option");
+        subAnnounce("Delete check file, if it exists");
+        String name = CheckProgramNeedsRunning.generateName(inputDirectory);
+        File checkFile = new File(System.getProperty("user.dir"), name);
+        checkFile.delete();
+
+        subAnnounce("Run program. Files will be regenerated since nothing to compare against");
+        Fram fram = new Fram();
+        fram.runProgram(new String[]{inputDirectory, outputDirectory, "--verbose",
+            "--check", "--minimumwidth=1024"});
+        assertTrue("Renegerated files", fram.getProcessor().getChecker().getChangedFlag());
+
+        checkFile.delete();
+        subAnnounce("Run program again. Should be regenerated");
+        fram = new Fram();
+        fram.runProgram(new String[]{inputDirectory, outputDirectory, "--verbose",
+            "--check", "--minimumwidth=4024"});
+        assertTrue("Renegerated files", fram.getProcessor().getChecker().getChangedFlag());
     }
 
 }

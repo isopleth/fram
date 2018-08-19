@@ -23,11 +23,13 @@ public class ManipulateImage {
     static BufferedImage mirror(BufferedImage image) {
         int width = image.getWidth();
         int height = image.getHeight();
-        BufferedImage newImage = new BufferedImage(width * 2, height, BufferedImage.TYPE_3BYTE_BGR);
+        BufferedImage newImage = new BufferedImage(width * 2, height,
+                BufferedImage.TYPE_3BYTE_BGR);
         Graphics2D gb = (Graphics2D) newImage.getGraphics();
         AffineTransform tx = AffineTransform.getScaleInstance(-1, 1);
         tx.translate(-width, 0);
-        AffineTransformOp op = new AffineTransformOp(tx, AffineTransformOp.TYPE_NEAREST_NEIGHBOR);
+        AffineTransformOp op = new AffineTransformOp(tx,
+                AffineTransformOp.TYPE_NEAREST_NEIGHBOR);
         newImage = op.filter(image, null);
         gb.drawImage(newImage, 0, 0, null);
         return newImage;
@@ -44,13 +46,13 @@ public class ManipulateImage {
 
         int newHeight = image.getHeight() * newWIdth / image.getWidth();
         BufferedImage resizedImage = new BufferedImage(newWIdth, newHeight, image.getType());
-        Graphics2D g = resizedImage.createGraphics();
-        g.drawImage(image, 0, 0, newWIdth, newHeight, null);
-        g.dispose();
-        g.setComposite(AlphaComposite.Src);
-        g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
-        g.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
-        g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        Graphics2D graphics2d = resizedImage.createGraphics();
+        graphics2d.drawImage(image, 0, 0, newWIdth, newHeight, null);
+        graphics2d.dispose();
+        graphics2d.setComposite(AlphaComposite.Src);
+        graphics2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+        graphics2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+        graphics2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         return resizedImage;
     }
 
