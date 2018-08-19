@@ -39,7 +39,7 @@ the copying code if the number has not changed since last time it was run.
 This is intended for using the program in a batch job, where the program is
 regularly run but only has to regenerate the output tree if something has
 changed.  The check number is contained in the current directory, in a file called
-checkfile.txt.
+check_XXXXXXXXXXXXXXXXXxxxx.txt, where XXXX is a string of hexadecimal numbers.
 
 --date
 
@@ -48,7 +48,7 @@ photos but if the photo has been scanned from a negative then the date, if any,
 will have been written by the device which scanned the photos and so will not
 relate to the date that the picture was taken.
 
---minimumWidth=4096
+--minimumwidth=5656
 
 Set minimum output image width to this number of pixels.  Default is 2048.  You
 sometimes need a bigger width if the titles to be written across the top of it
@@ -72,6 +72,4 @@ modifying or fixing in some way.
 --verbose
 
 This produces more logging output than usual.
-
-
 

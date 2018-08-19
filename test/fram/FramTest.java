@@ -1,8 +1,14 @@
 package fram;
 
+import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
 import java.util.HashSet;
+import java.util.Locale;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.imageio.ImageIO;
 import org.junit.After;
 import org.junit.AfterClass;
 import static org.junit.Assert.assertFalse;
@@ -256,13 +262,60 @@ public class FramTest {
         fram.runProgram(new String[]{inputDirectory, outputDirectory, "--verbose",
             "--check", "--minimumwidth=1024"});
         assertTrue("Renegerated files", fram.getProcessor().getChecker().getChangedFlag());
+        for (File file : getOutputFiles()) {
+            try {
+                int imageWidth = getImageWidth(file);
+                assertTrue(String.format(Locale.UK,
+                        "%d >= 1024", imageWidth), imageWidth >= 1024);
+                // Some of the original images are 5152 pixels wide
+                assertTrue(String.format(Locale.UK,
+                        "%d <= 5125", imageWidth), imageWidth <= 5152);
+            } catch (IOException ex) {
+                Logger.getLogger(FramTest.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
 
         checkFile.delete();
         subAnnounce("Run program again. Should be regenerated");
         fram = new Fram();
         fram.runProgram(new String[]{inputDirectory, outputDirectory, "--verbose",
             "--check", "--minimumwidth=4024"});
+        for (File file : getOutputFiles()) {
+            try {
+                int imageWidth = getImageWidth(file);
+                assertTrue(String.format(Locale.UK,
+                        "%d >= 4024", imageWidth), imageWidth >= 4024);
+                // Some of the original images are 5152 pixels wide
+                assertTrue(String.format(Locale.UK,
+                        "%d <= 5125", imageWidth), imageWidth <= 5152);
+            } catch (IOException ex) {
+                Logger.getLogger(FramTest.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
         assertTrue("Renegerated files", fram.getProcessor().getChecker().getChangedFlag());
+    }
+
+    /**
+     * Get a list of the output files from the program
+     *
+     * @return list of output files
+     */
+    private File[] getOutputFiles() {
+        File outputDir = new File(outputDirectory);
+        File createdDir = new File(outputDir, "000000");
+        return createdDir.listFiles();
+    }
+
+    /**
+     * Get with width of the specified image
+     *
+     * @param file image file
+     * @return width in pixels
+     * @throws IOException
+     */
+    private int getImageWidth(File file) throws IOException {
+        BufferedImage bimg = ImageIO.read(file);
+        return bimg.getWidth();
     }
 
 }

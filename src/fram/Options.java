@@ -79,7 +79,7 @@ class Options {
         options.put(Option.SHOW_DATE, 0);
         options.put(Option.NO_DIRECTORY_NAME, 1);
         options.put(Option.CACHE, 0);
-        options.put(Option.MINIMUM_WIDTH, 2048);
+        options.put(Option.MINIMUM_WIDTH, 5656);
     }
 
     /**
@@ -96,7 +96,7 @@ class Options {
 
         if (keyword.startsWith("--")) {
             int numericValue = 1;
-            if (keyword.contains("=")) {
+            if (arg.contains("=")) {
                 String value = arg.replaceAll("^.*=", "");
                 if (value.equalsIgnoreCase("T")) {
                     value = "1";
@@ -120,10 +120,8 @@ class Options {
                 options.put(option, numericValue);
                 found = true;
             } else {
-
                 System.out.print("    Unrecognised option " + arg);
             }
-
         }
 
         System.out.println();
