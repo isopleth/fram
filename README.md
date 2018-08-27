@@ -156,3 +156,21 @@ image which needs modifying or fixing in some way.
 This produces more logging output than usual.
 
 
+## Libraries
+
+The runtime libraries needed by the program are in dist/lib. Note
+that whilst these are all FOSS libraries, they are licensed 
+differently to mt code.  The file licences.txt in dist/lib details
+the licences that they use.
+
+To run the ant script, which is the best way of building and testing
+the program, you will need to have ant, junit and the ant-junit
+library installed.  Then set the current directory to the top
+level fram directory and run "ant".  It will build the code if
+necessary and run the unit tests.  To force it to rebuild everything
+run "ant clean" first.
+
+On Ubuntu (18.04 as I write), this is the ant
+and ant-optional packages.  And you will need the Java runtime library.
+I wrote this all using the Netbeans IDE, so you might want to install
+that too (https://netbeans.apache.org/).
