@@ -1,5 +1,6 @@
 package fram;
 
+import fram.filesystem.FileCopier;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -25,7 +26,7 @@ import java.util.logging.Logger;
  *
  * @author Jason Leake
  */
-class Cache {
+public class Cache {
 
     private Connection con;
     private File cacheDirectory;
@@ -291,7 +292,7 @@ class Cache {
     /**
      * Make sure the database connection is closed
      */
-    protected void close() {
+    public void close() {
         if (con != null) {
             try {
                 con.close();

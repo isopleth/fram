@@ -10,11 +10,13 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * Checks that this is a valid photoframe tree before deleting it
+ * Checks that this is a valid photoframe tree before deleting it. This is to
+ * prevent putting the wrong directory name into the program from doing too much
+ * damage.
  *
  * @author Jason Leake
  */
-class CheckThisIsAPhotoframeTree implements FileVisitor<Path> {
+public class PhotoframeTreeValidator implements FileVisitor<Path> {
 
     private final Path outputDirectory;
     private boolean isPhotoframeTree;
@@ -24,7 +26,7 @@ class CheckThisIsAPhotoframeTree implements FileVisitor<Path> {
      *
      * @param outputDir proposed output directory for files
      */
-    CheckThisIsAPhotoframeTree(Path outputDir) {
+    public PhotoframeTreeValidator(Path outputDir) {
         outputDirectory = outputDir;
         System.out.println(String.format("Check tree - %s is the proposed photoframe tree",
                 outputDir));
@@ -42,11 +44,19 @@ class CheckThisIsAPhotoframeTree implements FileVisitor<Path> {
             Files.walkFileTree(outputDirectory, this);
             return isPhotoframeTree;
         } catch (IOException ex) {
-            Logger.getLogger(CheckThisIsAPhotoframeTree.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(PhotoframeTreeValidator.class.getName()).log(Level.SEVERE, null, ex);
             return false;
         }
     }
 
+    /**
+     * Called just before any directory is visited. It does nothing.
+     *
+     * @param dir
+     * @param attrs
+     * @return CONTINUE always
+     * @throws IOException
+     */
     @Override
     public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
         return FileVisitResult.CONTINUE;
@@ -54,6 +64,7 @@ class CheckThisIsAPhotoframeTree implements FileVisitor<Path> {
 
     /**
      * Check file is valid
+     *
      * @param file file to check
      * @param attrs file attributes
      * @return true if it is a valid file
@@ -81,6 +92,14 @@ class CheckThisIsAPhotoframeTree implements FileVisitor<Path> {
         return FileVisitResult.CONTINUE;
     }
 
+    /**
+     * Called after each directory is visited. It does nothing.
+     *
+     * @param dir
+     * @param exc
+     * @return
+     * @throws IOException
+     */
     @Override
     public FileVisitResult postVisitDirectory(Path dir, IOException exc) throws IOException {
 

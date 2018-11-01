@@ -7,12 +7,12 @@ Input dir is a pre-existing directory tree containing the input files. Only .JPG
 .jpg (i.e. any case) etc Jpeg format files are processed, all others are skipped.
 
 Output dir is a pre-existing directory where the files for the photoframe are to
-be copied to.  This is typically the name of the USB or SD device which is going to
-be plugged into the photoframe.  The alphabetical order of the files in the output
-directory is jumbled up so that photos are displayed in a random order.
+be copied to.  This is typically the name of the USB or SD device which is going
+to be plugged into the photoframe.  The alphabetical order of the files in the
+output directory is jumbled up so that photos are displayed in a random order.
 
-To make human navigation of the output tree easier, for example if your operating
-system tries to display thumbnails, it is split into subdirectories
+To make human navigation of the output tree easier, for example if your
+operating system tries to display thumbnails, it is split into subdirectories
 containing 100 files each.  Doing things this way means that there are not
 thousands of files for the operating system to have to display in any directory.
 The directories have numeric names, such as 000010, 000011, etc.
@@ -38,8 +38,9 @@ This counts the number of files in the input directory tree and does not run
 the copying code if the number has not changed since last time it was run.
 This is intended for using the program in a batch job, where the program is
 regularly run but only has to regenerate the output tree if something has
-changed.  The check number is contained in the current directory, in a file called
-check_XXXXXXXXXXXXXXXXXxxxx.txt, where XXXX is a string of hexadecimal numbers.
+changed.  The check number is contained in the current directory, in a file
+called check_XXXXXXXXXXXXXXXXXxxxx.txt, where XXXX is a string of hexadecimal
+numbers.
 
 --date
 

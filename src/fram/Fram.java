@@ -1,5 +1,7 @@
 package fram;
 
+import fram.filesystem.ProcessFiles;
+import fram.rotation.RotationCounter;
 import java.io.File;
 import java.util.logging.Logger;
 
@@ -18,7 +20,7 @@ import java.util.logging.Logger;
  */
 public class Fram {
 
-    private static final String VERSION = "1.002";
+    private static final String VERSION = "1.003";
     private static final Logger logger = Logger.getLogger(Fram.class.getName());
     private ProcessFiles processFiles;
 

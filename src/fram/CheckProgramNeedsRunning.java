@@ -22,7 +22,7 @@ import java.util.logging.Logger;
  *
  * @author Jason Leake
  */
-final class CheckProgramNeedsRunning implements FileVisitor<Path> {
+final public class CheckProgramNeedsRunning implements FileVisitor<Path> {
 
     private final Configuration theConfiguration;
     private int count = 0;

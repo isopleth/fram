@@ -1,5 +1,8 @@
-package fram;
+package fram.filesystem;
 
+import fram.Cache;
+import fram.CheckProgramNeedsRunning;
+import fram.Configuration;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -9,10 +12,9 @@ import java.util.logging.Logger;
  *
  * @author Jason Leake
  */
-class ProcessFiles {
+public class ProcessFiles {
 
     private final Configuration theConfiguration;
-    private final Object lock = new Object();
     private Walker walker;
     private CheckProgramNeedsRunning checker = null;
 
@@ -21,7 +23,7 @@ class ProcessFiles {
      *
      * @param configuration Configuration data
      */
-    ProcessFiles(Configuration configuration) {
+    public ProcessFiles(Configuration configuration) {
         theConfiguration = configuration;
     }
 
@@ -50,7 +52,7 @@ class ProcessFiles {
                 if (theConfiguration.getCache()) {
                     cache = new Cache();
                 }
-                walker = new Walker(theConfiguration, lock, cache);
+                walker = new Walker(theConfiguration, cache);
                 walker.process(true);
                 walker.writeExclusionListFile();
                 walker.process(false);

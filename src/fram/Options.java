@@ -12,7 +12,7 @@ class Options {
 
     enum Option {
         VERBOSE, CHECK, SHOW_FILENAME, NO_ROTATE_IMAGES, SHOW_DATE,
-        NO_DIRECTORY_NAME, CACHE, MINIMUM_WIDTH;
+        NO_DIRECTORY_NAME, REMOVE_BORDER, CACHE, MINIMUM_WIDTH;
         private static final Map<String, Option> keywords = new HashMap<>();
 
         static {
@@ -25,7 +25,7 @@ class Options {
             keywords.put("--nodirectory", NO_DIRECTORY_NAME);
             keywords.put("--cache", CACHE);
             keywords.put("--minimumwidth", MINIMUM_WIDTH);
-
+            keywords.put("--removeborder", REMOVE_BORDER);
         }
 
         private String description() {
@@ -45,6 +45,8 @@ class Options {
                     return "Use cache";
                 case MINIMUM_WIDTH:
                     return "Specify minimum width for image";
+                case REMOVE_BORDER:
+                    return "Remove any white border around images";
                 default:
                     return "Unknown enum!";
             }
@@ -78,6 +80,7 @@ class Options {
         options.put(Option.NO_ROTATE_IMAGES, 0);
         options.put(Option.SHOW_DATE, 0);
         options.put(Option.NO_DIRECTORY_NAME, 1);
+        options.put(Option.REMOVE_BORDER, 1);
         options.put(Option.CACHE, 0);
         options.put(Option.MINIMUM_WIDTH, 5656);
     }
@@ -126,7 +129,6 @@ class Options {
 
         System.out.println();
         return found;
-
     }
 
     /**
@@ -156,10 +158,6 @@ class Options {
      * @return value
      */
     public int get(Option option) {
-        if (options.containsKey(option)) {
-            return options.get(option);
-
-        }
-        return 0;
+        return options.containsKey(option) ? options.get(option) : 0;
     }
 }

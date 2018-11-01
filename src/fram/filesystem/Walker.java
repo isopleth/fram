@@ -1,5 +1,10 @@
-package fram;
+package fram.filesystem;
 
+
+import fram.Cache;
+import fram.Configuration;
+import fram.DateAndTimeNow;
+import fram.OutputFileIndexGenerator;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.FileReader;
@@ -50,9 +55,9 @@ class Walker implements FileVisitor<Path> {
      * Constructor
      *
      * @param configuration command line options etc
-     * @param lock lock for messages buffer
+     * @param cache file cache
      */
-    public Walker(Configuration configuration, Object lock, Cache cache) {
+    public Walker(Configuration configuration, Cache cache) {
         theConfiguration = configuration;
         outputFileIndexGenerator = new OutputFileIndexGenerator();
         fileCopier = new FileCopier(configuration, cache, configuration.isVerboseMode());

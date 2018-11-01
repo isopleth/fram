@@ -1,10 +1,18 @@
-package fram;
+package fram.filesystem;
 
+import fram.rotation.RotationCounter;
+import fram.rotation.Orientation;
+import fram.border.BorderProcessor;
 import com.drew.imaging.jpeg.JpegMetadataReader;
 import com.drew.imaging.jpeg.JpegProcessingException;
 import com.drew.metadata.Metadata;
 import com.drew.metadata.MetadataException;
 import com.drew.metadata.exif.ExifIFD0Directory;
+import fram.Cache;
+import fram.Configuration;
+import fram.ExifDateReader;
+import fram.Hash;
+import fram.ManipulateImage;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
@@ -30,7 +38,7 @@ import javax.imageio.ImageIO;
  *
  * @author Jason Leake
  */
-class FileCopier {
+public class FileCopier {
 
     private Configuration theConfiguration;
     private SortedMap<Integer, Path> fileMap = new TreeMap<>();
@@ -44,7 +52,9 @@ class FileCopier {
     /**
      * Constructor
      *
-     * @param configuration program configuration information
+     * @param configuration configuration settings
+     * @param cache file cache
+     * @param copylist true to log the file copy
      */
     public FileCopier(Configuration configuration, Cache cache, boolean copylist) {
         theCache = cache;
@@ -109,8 +119,10 @@ class FileCopier {
             // If we are logging the filenames then do that
             if (copyListFile != null) {
                 try {
-                    copyListFile.write("Copy " + inputFile.toString() + " to "
-                            + photoframeFile.toString() + "\n");
+                    String message = String.format("Copy %s to %s\n",
+                            inputFile.toString(),
+                            photoframeFile.toString());
+                    copyListFile.write(message);
                 } catch (IOException ex) {
                     logger.log(Level.SEVERE, null, ex);
                 }
@@ -142,7 +154,7 @@ class FileCopier {
         String hash = null;
         if (theCache != null) {
             try {
-                hash = new Hash(theConfiguration).smoke(originalFile.toFile());
+                hash = new Hash(theConfiguration).generate(originalFile.toFile());
                 Path cachedFile = theCache.getCachedFile(originalFile, hash);
                 if (cachedFile != null) {
                     // There is a cached file all ready so no need to process
@@ -208,6 +220,15 @@ class FileCopier {
             int width = image.getWidth();
             if (image.getType() != BufferedImage.TYPE_3BYTE_BGR) {
                 image = ManipulateImage.make3ByteBgr(image);
+            }
+
+            // Remove any border around the image if necessary
+            if (theConfiguration.removeBorder()) {
+                BorderProcessor borderProcessor = new BorderProcessor(image);
+                if (borderProcessor.hasBorder()) {
+                    image = borderProcessor.removeBorder();
+                }
+
             }
 
             final int minimumWidth = theConfiguration.getMinimumWidth();

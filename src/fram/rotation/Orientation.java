@@ -1,4 +1,4 @@
-package fram;
+package fram.rotation;
 
 /**
  * Enum for image rotation
@@ -16,7 +16,7 @@ public enum Orientation {
     ANTICLOCKWISE_AND_MIRROR,
     UNDEFINED;
 
-    static Orientation convertValue(int value) {
+    static public Orientation convertValue(int value) {
         // Only process some orientations. This is the full set, but many seem to be
         // used when there is no non-normal orientation
         // 1	top	left side

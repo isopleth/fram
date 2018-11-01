@@ -1,4 +1,4 @@
-package fram;
+package fram.filesystem;
 
 import java.io.IOException;
 import java.nio.file.FileVisitResult;

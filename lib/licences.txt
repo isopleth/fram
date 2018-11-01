@@ -8,3 +8,5 @@ package                   Licence   URL of package
 sqlite-jdbc-3.23.1.jar    Apache    https://github.com/xerial/sqlite-jdbc
 xmpcore.jar               BSD       https://www.adobe.com/devnet/xmp.html
 metadata-extractor.jar    Apache    https://github.com/drewnoakes/metadata-extractor
+commons-math3-3.6.1       Apache    https://commons.apache.org/proper/commons-math/
+

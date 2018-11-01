@@ -15,7 +15,7 @@ import java.util.logging.Logger;
  *
  * @author Jason Leake
  */
-class ExifDateReader {
+public class ExifDateReader {
 
     private final Path file;
 

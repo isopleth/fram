@@ -8,6 +8,7 @@ import static fram.Options.Option.NO_ROTATE_IMAGES;
 import static fram.Options.Option.SHOW_DATE;
 import static fram.Options.Option.SHOW_FILENAME;
 import static fram.Options.Option.VERBOSE;
+import static fram.Options.Option.REMOVE_BORDER;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
@@ -18,7 +19,7 @@ import java.nio.file.Paths;
  *
  * @author Jason Leake
  */
-class Configuration {
+public class Configuration {
 
     private File inputDirectory;
     private File outputDirectory;
@@ -60,7 +61,6 @@ class Configuration {
             return false;
         }
         return true;
-
     }
 
     /**
@@ -204,7 +204,7 @@ class Configuration {
      *
      * @return true if cache is enabled
      */
-    boolean getCache() {
+    public boolean getCache() {
         return options.get(CACHE) != 0;
     }
 
@@ -219,12 +219,21 @@ class Configuration {
 
     /**
      * Set the options to the specified set of options
+     *
      * @param newOptions the new options
      * @return true always, as always successful
      */
     boolean setOptions(Options newOptions) {
         options = newOptions;
         return true;
+    }
+
+    /**
+     * Remove border around photos
+     * @return true if enabled
+     */
+    public boolean removeBorder() {
+        return options.get(REMOVE_BORDER) != 0;
     }
 
 }

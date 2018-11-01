@@ -1,4 +1,4 @@
-package fram;
+package fram.rotation;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -8,7 +8,7 @@ import java.util.Map;
  *
  * @author Jason Leake
  */
-class RotationCounter {
+public class RotationCounter {
 
     private static Map<Orientation, Integer> rotationCounts = new HashMap<>();
 
@@ -56,7 +56,7 @@ class RotationCounter {
      * @param counts array of counts
      * @return counts as a string - just used for testing
      */
-    static String makeRotationCounts(int[] counts) {
+    static public String makeRotationCounts(int[] counts) {
         if (counts.length != Orientation.values().length) {
             return "bad length";
         }

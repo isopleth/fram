@@ -1,5 +1,6 @@
-package fram;
+package fram.filesystem;
 
+import fram.PhotoframeTreeValidator;
 import java.io.IOException;
 import java.nio.file.FileVisitResult;
 import java.nio.file.FileVisitor;
@@ -63,7 +64,7 @@ class DeleteTree implements FileVisitor<Path> {
      */
     public void process() {
         try {
-            if (new CheckThisIsAPhotoframeTree(outputDirectory).verify()) {
+            if (new PhotoframeTreeValidator(outputDirectory).verify()) {
                 Files.walkFileTree(outputDirectory, this);
             }
             else {

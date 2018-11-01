@@ -1,5 +1,6 @@
 package fram;
 
+import fram.filesystem.FileCopier;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -20,14 +21,14 @@ public class Hash {
 
     private static MessageDigest digest = null;
     private static Configuration theConfiguration;
-    private static String CLASSNAME = Hash.class.getName();
+    private static final String CLASSNAME = Hash.class.getName();
 
     /**
      * Constructor Re-uses message digest class.
      *
      * @throws NoSuchAlgorithmException
      */
-    Hash(Configuration config) throws NoSuchAlgorithmException {
+    public Hash(Configuration config) throws NoSuchAlgorithmException {
         theConfiguration = config;
         if (digest == null) {
             digest = MessageDigest.getInstance("SHA-256");
@@ -42,7 +43,7 @@ public class Hash {
      * @param inputFile input file to process
      * @return its hash
      */
-    public String smoke(File inputFile) {
+    public String generate(File inputFile) {
         String output;
         int read;
         byte[] buffer = new byte[8192];

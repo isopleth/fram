@@ -20,7 +20,7 @@ public class ManipulateImage {
      * @param image the input image
      * @return the modified image
      */
-    static BufferedImage mirror(BufferedImage image) {
+    public static BufferedImage mirror(BufferedImage image) {
         int width = image.getWidth();
         int height = image.getHeight();
         BufferedImage newImage = new BufferedImage(width * 2, height,
@@ -42,7 +42,7 @@ public class ManipulateImage {
      * @param newWidth new image width in pixels
      * @return resized image
      */
-    static BufferedImage resizeImage(BufferedImage image, int newWIdth) {
+    public static BufferedImage resizeImage(BufferedImage image, int newWIdth) {
 
         int newHeight = image.getHeight() * newWIdth / image.getWidth();
         BufferedImage resizedImage = new BufferedImage(newWIdth, newHeight, image.getType());
@@ -63,7 +63,7 @@ public class ManipulateImage {
      * @param angle number of right angles to rotate it
      * @return rotated image
      */
-    static BufferedImage rotate(BufferedImage image, int rightAngles) {
+    public static BufferedImage rotate(BufferedImage image, int rightAngles) {
         float sign = 1;
         if (rightAngles < 0) {
             rightAngles = -rightAngles;
@@ -94,7 +94,7 @@ public class ManipulateImage {
      * @param image image to read for conversion
      * @return new converted image
      */
-    static BufferedImage make3ByteBgr(BufferedImage image) {
+    public static BufferedImage make3ByteBgr(BufferedImage image) {
         // Convert monochrome etc images to 3 byte BGR
         BufferedImage newImage = new BufferedImage(image.getHeight(), image.getWidth(), BufferedImage.TYPE_3BYTE_BGR);
         Graphics2D graphics = (Graphics2D) newImage.getGraphics();

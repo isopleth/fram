@@ -7,7 +7,7 @@ import java.util.Date;
  *
  * @author Jason Leake
  */
-class DateAndTimeNow {
+public class DateAndTimeNow {
 
     /**
      * Get the current date, and append newline to return string

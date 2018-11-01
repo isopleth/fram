@@ -4,7 +4,7 @@ import java.io.InputStream;
 import java.util.Scanner;
 
 /**
- * Help text
+ * Display help text
  *
  * @author Jason Leake
  */

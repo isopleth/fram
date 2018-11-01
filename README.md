@@ -2,16 +2,16 @@
 
 Annotate photographs for display in a digital photoframe.
 
-This is a program for preparing the files for a digital photo frame. These
-devices show a stream of photographs loaded from a memory stick, changing the
-photo every few seconds or minutes. The simpler ones just read the memory
-stick and display the photos, whilst the more complicated ones are based
-on tablets.
+This is a program for preparing the files for a digital photo
+frame. These devices show a stream of photographs loaded from a memory
+stick, changing the photo every few seconds or minutes. The simpler
+ones just read the memory stick and display the photos, whilst the
+more complicated ones are based on tablets.
 
-This program takes a directory containing jpeg format files and generates a
-new directory containing the same files. These photos can be a mixture of
-scanned photographs and digital images.  It does several things during the
-transfer:
+This program takes a directory containing jpeg format files and
+generates a new directory containing the same files. These photos can
+be a mixture of scanned photographs and digital images.  It does
+several things during the transfer:
 
 - It adds the name of the original directory containing each the photo
 to the new jpeg image.  If the photos are stored in directories which
@@ -19,8 +19,8 @@ say when and where the photo was taken, then each photo picks up this
 annotation which can be seen when the photo is displayed. It can also
 add the name of the original photograph file to the image.
 
-- It rotates the photo to match the orientation specified by its exif data.
-Some photo frames aren't very good at doing this automatically.
+- It rotates the photo to match the orientation specified by its exif
+data.  Some photo frames aren't very good at doing this automatically.
 
 - It randomises the order of the photos, putting them into
 subdirectories with a random number and giving them random number
@@ -51,9 +51,9 @@ caching takes several hours in my case.
 
 ## Excluding files
 
-Sometimes you don't want specific files or directory trees to be included
-in the photographs displayed.  You do this by creating files in the directory
-you want to exclude.
+Sometimes you don't want specific files or directory trees to be
+included in the photographs displayed.  You do this by creating files
+in the directory you want to exclude.
 
 A file called _photoframe_exclude.txt in the directory means that the
 directory, and any sub-directories, are excluded.
@@ -66,9 +66,9 @@ My photo 0003.jpg
 
 will exclude "My photo 0002".jpg and "My photo 0003".jpg from the output.
 
-The path names of files excluded from the output are appended to a text
-file, exclusion_list.txt, each time the program is run so that you can
-check the exclusion is working.
+The path names of files excluded from the output are appended to a
+text file, exclusion_list.txt, each time the program is run so that
+you can check the exclusion is working.
 
 ## Usage
 
@@ -123,9 +123,9 @@ not run the copying code if the number has not changed since last time
 it was run.  This is intended for using the program in a batch job,
 where the program is regularly run but only has to regenerate the
 output tree if something has changed.  The check number is contained
-in the current directory, in a file called check_<long random number>.txt.
-This ensures a unique name, as the program can be run several times from
-the same place on different directory trees.
+in the current directory, in a file called check_<long random
+number>.txt.  This ensures a unique name, as the program can be run
+several times from the same place on different directory trees.
 
 --date
 
@@ -170,7 +170,7 @@ level fram directory and run "ant".  It will build the code if
 necessary and run the unit tests.  To force it to rebuild everything
 run "ant clean" first.
 
-On Ubuntu (18.04 as I write), this is the ant
-and ant-optional packages.  And you will need the Java runtime library.
-I wrote this all using the Netbeans IDE, so you might want to install
-that too (https://netbeans.apache.org/).
+On Ubuntu (18.04 as I write), this is the ant and ant-optional
+packages.  And you will need the Java runtime library.  I wrote this
+all using the Netbeans IDE, so you might want to install that too
+(https://netbeans.apache.org/).

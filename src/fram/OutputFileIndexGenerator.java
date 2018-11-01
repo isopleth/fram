@@ -8,9 +8,8 @@ import java.util.Set;
  *
  * @author Jason Leake
  */
-class OutputFileIndexGenerator {
+public class OutputFileIndexGenerator {
 
-    private int value = 0;
     private final Set<Integer> usedIndices = new HashSet<>();
     private int totalFiles = 0;
     private final int MAX_FILES = 1_000_000;
