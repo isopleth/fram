@@ -61,7 +61,7 @@ directory, and any sub-directories, are excluded.
 A file called _photoframe_exclude_list.txt means that the files inside
 the directory that are listed inside it will be excluded. For example:
 
-`My photo 0002.jpg
+`My photo 0002.jpg  
 My photo 0003.jpg`
 
 will exclude "My photo 0002".jpg and "My photo 0003".jpg from the output.
