@@ -61,8 +61,8 @@ directory, and any sub-directories, are excluded.
 A file called _photoframe_exclude_list.txt means that the files inside
 the directory that are listed inside it will be excluded. For example:
 
-My photo 0002.jpg
-My photo 0003.jpg
+`My photo 0002.jpg`
+`My photo 0003.jpg`
 
 will exclude "My photo 0002".jpg and "My photo 0003".jpg from the output.
 
@@ -74,7 +74,7 @@ you can check the exclusion is working.
 
 It is written in Java, and intended to be run from the command line. e.g.
 
-java -classpath $HOME/projects/fram/dist/lib -jar $HOME/fram/dist/fram.jar /cifs/media/Photo\ album/ /cifs/photoframe --verbose --check --cache
+`java -classpath $HOME/projects/fram/dist/lib -jar $HOME/fram/dist/fram.jar /cifs/media/Photo\ album/ /cifs/photoframe --verbose --check --cache`
 
 It relies upon three widely used third party jar files for processing
 exif data, manipulating the image and interfacing to SQLite 3, which
@@ -83,7 +83,7 @@ repo, along with the licence information for them.
 
 ## Options
 
-Arguments are <input dir> <output dir>
+Arguments are `<input dir> <output dir>`
 
 Input dir is a pre-existing directory tree containing the input
 files. Only .JPG, .jpg (i.e. any case) etc Jpeg format files are
@@ -116,7 +116,7 @@ containing directory written at the top of the output image.
 
 The command line options are as follows. They are all case-insensitive.
 
---check
+`--check`
 
 This counts the number of files in the input directory tree and does
 not run the copying code if the number has not changed since last time
@@ -127,7 +127,7 @@ in the current directory, in a file called check_<long random
 number>.txt.  This ensures a unique name, as the program can be run
 several times from the same place on different directory trees.
 
---date
+`--date`
 
 Add the date that the photo was taken to the annotation.  This works
 for digital photos but if the photo has been scanned from a negative
@@ -135,23 +135,23 @@ then the date, if any, will have been written by the device which
 scanned the photos and so will not relate to the date that the picture
 was taken.
 
---nodirectory
+`--nodirectory`
 
 Suprressing adding the directory name text to the output file.
 
---norotate
+`--norotate`
 
 Do not rotate the output file. If not specified the image is rotated
 according to the exif information about the image orientation found
 in the input file.
 
---showfilename
+`--showfilename`
 
 This adds text to the bottom left corner of the output images which
 specifies their original filenames.  It is useful for tracking down an
 image which needs modifying or fixing in some way.
 
---verbose
+`--verbose`
 
 This produces more logging output than usual.
 
@@ -166,11 +166,11 @@ the licences that they use.
 To run the ant script, which is the best way of building and testing
 the program, you will need to have ant, junit and the ant-junit
 library installed.  Then set the current directory to the top
-level fram directory and run "ant".  It will build the code if
+level fram directory and run `ant`.  It will build the code if
 necessary and run the unit tests.  To force it to rebuild everything
-run "ant clean" first.
+run `ant clean` first.
 
-On Ubuntu (18.04 as I write), this is the ant and ant-optional
+On Ubuntu (18.04 as I write), these are the ant and ant-optional
 packages.  And you will need the Java runtime library.  I wrote this
-all using the Netbeans IDE, so you might want to install that too
-(https://netbeans.apache.org/).
+all using the [Netbeans IDE](https://netbeans.apache.org/), so you might want to install that too
+.
