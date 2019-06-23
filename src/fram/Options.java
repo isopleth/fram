@@ -19,13 +19,14 @@ class Options {
             // These must all be lower case
             keywords.put("--verbose", VERBOSE);
             keywords.put("--check", CHECK);
-            keywords.put("--showfilenames", SHOW_FILENAME);
+            keywords.put("--showfilename", SHOW_FILENAME);
             keywords.put("--norotate", NO_ROTATE_IMAGES);
             keywords.put("--date", SHOW_DATE);
             keywords.put("--nodirectory", NO_DIRECTORY_NAME);
             keywords.put("--cache", CACHE);
             keywords.put("--minimumwidth", MINIMUM_WIDTH);
             keywords.put("--removeborder", REMOVE_BORDER);
+
         }
 
         private String description() {

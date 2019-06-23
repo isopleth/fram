@@ -76,8 +76,14 @@ public class Configuration {
                     inputDirectory.getAbsolutePath()));
             return false;
         }
+        if (!outputDirectory.exists()) {
+            errorMessage.append("Output directory ").append(selectedDirectory).
+                    append(" does not exist\n");
+            return false;
+        }
         if (!outputDirectory.canWrite()) {
-            errorMessage.append("Output directory ").append(selectedDirectory).append(" unwriteable\n");
+            errorMessage.append("Output directory ").append(selectedDirectory).
+                    append(" unwriteable\n");
             return false;
         }
         return true;

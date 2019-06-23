@@ -23,7 +23,7 @@ add the name of the original photograph file to the image.
 data.  Some photo frames aren't very good at doing this automatically.
 
 - It randomises the order of the photos, putting them into
-subdirectories with a random number and giving them random number
+sub-directories with a random number and giving them random number
 names within those directories.  This means that they should be
 displayed in random order even when played in sequence. Most photo
 frames have the ability to randomise the order of photographs but some
@@ -75,7 +75,7 @@ you can check the exclusion is working.
 
 It is written in Java, and intended to be run from the command line. e.g.
 
-`java -classpath $HOME/projects/fram/dist/lib -jar $HOME/fram/dist/fram.jar /cifs/media/Photo\ album/ /cifs/photoframe --verbose --check --cache`
+`java -cp /home/user/fram/lib/metadata-extractor.jar:/home/user/fram/lib/xmpcore.jar:/home/user/fram/lib/sqlite-jdbc-3.23.1.jar:/home/user/fram/lib/commons-math3-3.6.1.jar:/home/user/fram/dist/fram.jar fram.Fram test_data/testInput/ testOutput/ --verbose --check --cache`
 
 It relies upon three widely used third party jar files for processing
 exif data, manipulating the image and interfacing to SQLite 3, which
@@ -98,7 +98,7 @@ so that photos are displayed in a random order.
 
 To make human navigation of the output tree easier, for example if
 your operating system tries to display thumbnails, it is split into
-subdirectories containing 100 files each.  Doing things this way means
+sub-directories containing 100 files each.  Doing things this way means
 that there are not thousands of files for the operating system to have
 to display in any directory.  The directories have numeric names, such
 as 000010, 000011, etc.  Within them, the files also have numeric
@@ -124,8 +124,8 @@ not run the copying code if the number has not changed since last time
 it was run.  This is intended for using the program in a batch job,
 where the program is regularly run but only has to regenerate the
 output tree if something has changed.  The check number is contained
-in the current directory, in a file called check_<long random
-number>.txt.  This ensures a unique name, as the program can be run
+in the current directory, in a file called check_*long random
+number*.txt.  This ensures a unique name, as the program can be run
 several times from the same place on different directory trees.
 
 `--date`
@@ -138,7 +138,7 @@ was taken.
 
 `--nodirectory`
 
-Suprressing adding the directory name text to the output file.
+Suppressing adding the directory name text to the output file.
 
 `--norotate`
 
@@ -159,9 +159,9 @@ This produces more logging output than usual.
 
 ## Libraries
 
-The runtime libraries needed by the program are in dist/lib. Note
+The run-time libraries needed by the program are in dist/lib. Note
 that whilst these are all FOSS libraries, they are licensed 
-differently to mt code.  The file licences.txt in dist/lib details
+differently to my code.  The file licences.txt in dist/lib details
 the licences that they use.
 
 To run the ant script, which is the best way of building and testing
@@ -171,7 +171,8 @@ level fram directory and run `ant`.  It will build the code if
 necessary and run the unit tests.  To force it to rebuild everything
 run `ant clean` first.
 
-On Ubuntu (18.04 as I write), these are the ant and ant-optional
-packages.  And you will need the Java runtime library.  I wrote this
-all using the [Netbeans IDE](https://netbeans.apache.org/), so you might want to install that too
-.
+On Ubuntu (19.04), these are the ant and ant-optional packages.  And
+you will need the Java runtime library.  I wrote this all using the
+[Netbeans IDE](https://netbeans.apache.org/), so you might want to
+install that too.
+

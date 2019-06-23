@@ -95,7 +95,7 @@ public class BorderProcessor {
             }
         }
 
-        System.out.println("No border");
+        //System.out.println("No border");
         return false;
     }
 

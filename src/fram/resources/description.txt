@@ -62,7 +62,7 @@ Suppressing adding the directory name text to the output file.
 --norotate
 
 Do not rotate the output file. If not specified the image is rotated according
-to the exiff information about the image orientation found in the input file.
+to the exif information about the image orientation found in the input file.
 
 --showfilename
 

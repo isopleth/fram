@@ -75,8 +75,8 @@ public class FileCopier {
     /**
      * Add another file to the list of files to be copied
      *
+     * @param index index number to assign to file
      * @param file file to copy
-     * @param dest directory to copy it to
      */
     public void addAnotherFile(int index, Path file) {
         fileMap.put(index, file);

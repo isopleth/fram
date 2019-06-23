@@ -4,3 +4,5 @@ exclusion_list.txt
 framcache
 nbproject/private
 test_data/testOutput
+/dist/
+/build/

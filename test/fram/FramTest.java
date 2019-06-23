@@ -297,6 +297,24 @@ public class FramTest {
     }
 
     /**
+     * Test option to write the filename on each output file. All it really does
+     * is check that the option is accepted.
+     */
+    @Test
+    public void testShowFilenameOption() {
+        announce("test show filename option");
+        subAnnounce("Delete check file, if it exists");
+        String name = CheckProgramNeedsRunning.generateName(inputDirectory);
+        File checkFile = new File(System.getProperty("user.dir"), name);
+        checkFile.delete();
+
+        subAnnounce("Run program. Files should be regenerated since no check file present.");
+        Fram fram = new Fram();
+        fram.runProgram(new String[]{inputDirectory, outputDirectory, "--verbose", "--check", "--showFilename"});
+        assertTrue("Renegerated files", fram.getProcessor().getChecker().getChangedFlag());
+    }
+
+    /**
      * Get a list of the output files from the program
      *
      * @return list of output files

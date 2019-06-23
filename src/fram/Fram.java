@@ -8,19 +8,24 @@ import java.util.logging.Logger;
 /**
  * Copies .jpg files onto a memory stick for displaying on a photo frame device.
  *
- * Version history: 
+ * Version history:
+ *
+ * 1.000 - Original 
  * 
- * 1.000 - Original
+ * 1.001 - Cache and unit tests know about 
+ * 
+ * 1.002 - Allow user to set minimum image size 
+ * 
+ * 1.003 - Add some changes for detecting borders around photos 
+ * 
+ * 1.004 - Fix --showfilename, display command line
  *
- * 1.001 - Cache and unit tests know about
- *
- * 1.002 - Allow user to set minimum image size
  *
  * @author Jason Leake
  */
 public class Fram {
 
-    private static final String VERSION = "1.003";
+    private static final String VERSION = "1.004";
     private static final Logger logger = Logger.getLogger(Fram.class.getName());
     private ProcessFiles processFiles;
 
@@ -39,6 +44,20 @@ public class Fram {
      */
     public boolean runProgram(String[] args) {
         System.out.println("Program version " + VERSION);
+
+        System.out.println();
+        boolean first = true;
+        for (String arg : args) {
+            if (first) {
+                System.out.print("Arguments:");
+                first = false;
+            }
+
+            System.out.print(" ");
+            System.out.print(arg);
+        }
+        System.out.println();
+
         // This is maintained for the unit tests which use it
         RotationCounter.reset();
         // Guard against two instances of the same program running out of
