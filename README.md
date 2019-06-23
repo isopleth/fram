@@ -75,7 +75,7 @@ you can check the exclusion is working.
 
 It is written in Java, and intended to be run from the command line. e.g.
 
-`java -cp /home/user/fram/lib/metadata-extractor.jar:/home/user/fram/lib/xmpcore.jar:/home/user/fram/lib/sqlite-jdbc-3.23.1.jar:/home/user/fram/lib/commons-math3-3.6.1.jar:/home/user/fram/dist/fram.jar fram.Fram test_data/testInput/ testOutput/ --verbose --check --cache`
+`java -cp $HOME/fram/lib/metadata-extractor.jar:$HOME/fram/lib/xmpcore.jar:$HOME/fram/lib/sqlite-jdbc-3.23.1.jar:$HOME/fram/lib/commons-math3-3.6.1.jar:$HOME/fram/dist/fram.jar fram.Fram test_data/testInput/ testOutput/ --verbose --check --cache`
 
 It relies upon three widely used third party jar files for processing
 exif data, manipulating the image and interfacing to SQLite 3, which
