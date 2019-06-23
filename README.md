@@ -77,10 +77,11 @@ It is written in Java, and intended to be run from the command line. e.g.
 
 `java -cp $HOME/fram/lib/metadata-extractor.jar:$HOME/fram/lib/xmpcore.jar:$HOME/fram/lib/sqlite-jdbc-3.23.1.jar:$HOME/fram/lib/commons-math3-3.6.1.jar:$HOME/fram/dist/fram.jar fram.Fram test_data/testInput/ testOutput/ --verbose --check --cache`
 
-It relies upon three widely used third party jar files for processing
-exif data, manipulating the image and interfacing to SQLite 3, which
-is used in the caching.  for convenience, I have included them in this
-repo, along with the licence information for them.
+It relies upon four widely used third party jar files for processing
+exif data, manipulating the image, interfacing to SQLite 3 (which is
+used in the caching) and generating statistics.  for convenience, I
+have included them in this reposotory, in the lib sib0directory, along
+with the licence information for them.  This is in lib/licences.txt.
 
 ## Options
 
