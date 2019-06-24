@@ -42,12 +42,12 @@ public class ManipulateImage {
      * @param newWidth new image width in pixels
      * @return resized image
      */
-    public static BufferedImage resizeImage(BufferedImage image, int newWIdth) {
+    public static BufferedImage resizeImage(BufferedImage image, int newWidth) {
 
-        int newHeight = image.getHeight() * newWIdth / image.getWidth();
-        BufferedImage resizedImage = new BufferedImage(newWIdth, newHeight, image.getType());
+        int newHeight = image.getHeight() * newWidth / image.getWidth();
+        BufferedImage resizedImage = new BufferedImage(newWidth, newHeight, image.getType());
         Graphics2D graphics2d = resizedImage.createGraphics();
-        graphics2d.drawImage(image, 0, 0, newWIdth, newHeight, null);
+        graphics2d.drawImage(image, 0, 0, newWidth, newHeight, null);
         graphics2d.dispose();
         graphics2d.setComposite(AlphaComposite.Src);
         graphics2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
@@ -60,7 +60,7 @@ public class ManipulateImage {
      * Rotate the image by the specified angle in right angles
      *
      * @param image input image
-     * @param angle number of right angles to rotate it
+     * @param rightAngles number of right angles to rotate it
      * @return rotated image
      */
     public static BufferedImage rotate(BufferedImage image, int rightAngles) {
@@ -75,14 +75,18 @@ public class ManipulateImage {
         BufferedImage newImage;
         if ((rightAngles & 1) == 1) {
             // Odd number of right angles - aspect ratio changes
-            newImage = new BufferedImage(image.getHeight(), image.getWidth(), BufferedImage.TYPE_3BYTE_BGR);
+            newImage = new BufferedImage(image.getHeight(), image.getWidth(), 
+                    BufferedImage.TYPE_3BYTE_BGR);
         } else {
             // Even number of right angles - no change in aspect ratio
-            newImage = new BufferedImage(image.getWidth(), image.getHeight(), BufferedImage.TYPE_3BYTE_BGR);
+            newImage = new BufferedImage(image.getWidth(), image.getHeight(), 
+                    BufferedImage.TYPE_3BYTE_BGR);
         }
         Graphics2D graphics = (Graphics2D) newImage.getGraphics();
-        graphics.rotate(sign * Math.toRadians(rightAngles * 90), newImage.getWidth() / 2, newImage.getHeight() / 2);
-        graphics.translate((newImage.getWidth() - image.getWidth()) / 2, (newImage.getHeight() - image.getHeight()) / 2);
+        graphics.rotate(sign * Math.toRadians(rightAngles * 90), 
+                newImage.getWidth() / 2, newImage.getHeight() / 2);
+        graphics.translate((newImage.getWidth() - image.getWidth()) / 2, 
+                (newImage.getHeight() - image.getHeight()) / 2);
         graphics.drawImage(image, 0, 0, null);
         graphics.dispose();
         return newImage;
@@ -96,7 +100,8 @@ public class ManipulateImage {
      */
     public static BufferedImage make3ByteBgr(BufferedImage image) {
         // Convert monochrome etc images to 3 byte BGR
-        BufferedImage newImage = new BufferedImage(image.getHeight(), image.getWidth(), BufferedImage.TYPE_3BYTE_BGR);
+        BufferedImage newImage = new BufferedImage(image.getHeight(), 
+                image.getWidth(), BufferedImage.TYPE_3BYTE_BGR);
         Graphics2D graphics = (Graphics2D) newImage.getGraphics();
         graphics.drawImage(image, 0, 0, image.getHeight(), image.getWidth(), null);
         graphics.dispose();

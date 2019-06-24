@@ -26,6 +26,7 @@ public class Hash {
     /**
      * Constructor Re-uses message digest class.
      *
+     * @param config program configuration
      * @throws NoSuchAlgorithmException
      */
     public Hash(Configuration config) throws NoSuchAlgorithmException {

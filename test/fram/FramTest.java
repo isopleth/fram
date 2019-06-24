@@ -146,8 +146,8 @@ public class FramTest {
         if (!actualRotations.equals(expectedRotations)) {
             System.out.println("Actual: " + actualRotations);
             System.out.println("Expected: " + expectedRotations);
-
         }
+        System.out.flush();
         assertTrue("Rotations as expected", actualRotations.equals(expectedRotations));
 
     }
@@ -311,6 +311,24 @@ public class FramTest {
         subAnnounce("Run program. Files should be regenerated since no check file present.");
         Fram fram = new Fram();
         fram.runProgram(new String[]{inputDirectory, outputDirectory, "--verbose", "--check", "--showFilename"});
+        assertTrue("Renegerated files", fram.getProcessor().getChecker().getChangedFlag());
+    }
+
+    /**
+     * Test option to write the file index number on each output file. All it
+     * really does is check that the option is accepted.
+     */
+    @Test
+    public void testIndexOption() {
+        announce("test show index number option");
+        subAnnounce("Delete check file, if it exists");
+        String name = CheckProgramNeedsRunning.generateName(inputDirectory);
+        File checkFile = new File(System.getProperty("user.dir"), name);
+        checkFile.delete();
+
+        subAnnounce("Run program. Files should be regenerated since no check file present.");
+        Fram fram = new Fram();
+        fram.runProgram(new String[]{inputDirectory, outputDirectory, "--verbose", "--check", "--showIndex"});
         assertTrue("Renegerated files", fram.getProcessor().getChecker().getChangedFlag());
     }
 

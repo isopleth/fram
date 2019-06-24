@@ -44,7 +44,8 @@ public class PhotoframeTreeValidator implements FileVisitor<Path> {
             Files.walkFileTree(outputDirectory, this);
             return isPhotoframeTree;
         } catch (IOException ex) {
-            Logger.getLogger(PhotoframeTreeValidator.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(PhotoframeTreeValidator.class.getName()).
+                    log(Level.SEVERE, null, ex);
             return false;
         }
     }
@@ -58,7 +59,8 @@ public class PhotoframeTreeValidator implements FileVisitor<Path> {
      * @throws IOException
      */
     @Override
-    public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
+    public FileVisitResult preVisitDirectory(Path dir, 
+            BasicFileAttributes attrs) throws IOException {
         return FileVisitResult.CONTINUE;
     }
 
@@ -71,7 +73,8 @@ public class PhotoframeTreeValidator implements FileVisitor<Path> {
      * @throws IOException on error
      */
     @Override
-    public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+    public FileVisitResult visitFile(Path file, 
+            BasicFileAttributes attrs) throws IOException {
         String filename = file.getName(file.getNameCount() - 1).toString();
         boolean ok = false;
         if (filename.matches("\\d+\\.jpg")) {
@@ -87,7 +90,8 @@ public class PhotoframeTreeValidator implements FileVisitor<Path> {
     }
 
     @Override
-    public FileVisitResult visitFileFailed(Path file, IOException exc) throws IOException {
+    public FileVisitResult visitFileFailed(Path file, 
+            IOException exc) throws IOException {
 
         return FileVisitResult.CONTINUE;
     }
@@ -101,9 +105,8 @@ public class PhotoframeTreeValidator implements FileVisitor<Path> {
      * @throws IOException
      */
     @Override
-    public FileVisitResult postVisitDirectory(Path dir, IOException exc) throws IOException {
-
+    public FileVisitResult postVisitDirectory(Path dir, 
+            IOException exc) throws IOException {
         return FileVisitResult.CONTINUE;
     }
-
 }

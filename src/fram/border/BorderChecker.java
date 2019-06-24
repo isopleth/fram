@@ -35,7 +35,7 @@ class BorderChecker {
      * not close to white then mark the AverageColour object as not a border and
      * give up subsequent adding to the average, as a speed optimisation.
      *
-     * @param rgb
+     * @param rgb red/green/blue values
      */
     void add(int rgb) {
         if (!couldBeBorder) {
@@ -85,7 +85,7 @@ class BorderChecker {
     }
 
     /**
-     * Test if this linescan is definitely not a border
+     * Test if this line scan is definitely not a border
      *
      * @return true if it definitely isn't a border
      */

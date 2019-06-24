@@ -37,7 +37,8 @@ class DirectoryAdder implements FileVisitor<Path> {
     public FileVisitResult preVisitDirectory(Path directory,
             BasicFileAttributes bfa) throws IOException {
         excludeDirectoryList.add(directory);
-        System.out.println(String.format("Skip directory %s", directory.toFile().getAbsolutePath()));
+        System.out.println(String.format("Skip directory %s", 
+                directory.toFile().getAbsolutePath()));
         return CONTINUE;
     }
 

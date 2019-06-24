@@ -3,6 +3,8 @@ package fram.filesystem;
 import fram.Cache;
 import fram.Configuration;
 import fram.DateAndTimeNow;
+import fram.Options;
+import fram.Options.Option;
 import fram.OutputFileIndexGenerator;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -59,7 +61,8 @@ class Walker implements FileVisitor<Path> {
     public Walker(Configuration configuration, Cache cache) {
         theConfiguration = configuration;
         outputFileIndexGenerator = new OutputFileIndexGenerator();
-        fileCopier = new FileCopier(configuration, cache, configuration.isVerboseMode());
+        fileCopier = new FileCopier(configuration, 
+                cache, configuration.isSet(Option.VERBOSE));
     }
 
     /**

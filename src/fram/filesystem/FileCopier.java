@@ -13,6 +13,7 @@ import fram.Configuration;
 import fram.ExifDateReader;
 import fram.Hash;
 import fram.ManipulateImage;
+import fram.Options.Option;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
@@ -113,7 +114,7 @@ public class FileCopier {
             }
             return false;
         } else {
-            final Integer index = fileMap.firstKey();
+            final int index = fileMap.firstKey();
             final Path photoframeFile = convertIndexToDest(index);
             final Path inputFile = fileMap.get(index);
             // If we are logging the filenames then do that
@@ -133,22 +134,23 @@ public class FileCopier {
                 destinationDirectory.mkdir();
             }
 
-            copyAndAnnotateFile(inputFile, photoframeFile);
+            copyAndAnnotateFile(index, inputFile, photoframeFile);
 
             // Remove the entry from the map as we have processed it
             fileMap.remove(index);
-
         }
         return true;
     }
 
     /**
-     * Copy the file, adding the annotation. Rotate the output image if the
-     * metadata says this needs to be done
+     * Copy the file, adding any annotation requested. Rotate the output image
+     * if the metadata says this needs to be done
      *
      * @param photoframeOutputFile output file
      */
-    private void copyAndAnnotateFile(Path originalFile, Path photoframeOutputFile) {
+    private void copyAndAnnotateFile(int index,
+            Path originalFile,
+            Path photoframeOutputFile) {
 
         File outputFile = photoframeOutputFile.toFile();
         String hash = null;
@@ -159,7 +161,7 @@ public class FileCopier {
                 if (cachedFile != null) {
                     // There is a cached file all ready so no need to process
                     // the original file
-                    if (theConfiguration.isVerboseMode()) {
+                    if (theConfiguration.isSet(Option.VERBOSE)) {
                         System.out.println("Copying cached file to " + outputFile);
                         copyFile(cachedFile, photoframeOutputFile);
                     }
@@ -173,13 +175,12 @@ public class FileCopier {
         // Else cached files are not enabled, or this file isn't in the cache
         final double ANNOTATION_SIZE = 1.0 / 25.0;
 
-        String hint = "";
         try {
             URL imagePath = originalFile.toFile().toURI().toURL();
             BufferedImage image = ImageIO.read(imagePath);
 
             // Rotate the image if necessary
-            if (!theConfiguration.doNotRotateImages()) {
+            if (!theConfiguration.isSet(Option.NO_ROTATE_IMAGES)) {
                 Orientation imageOrientation = getOrientation(originalFile);
                 switch (imageOrientation) {
 
@@ -203,7 +204,8 @@ public class FileCopier {
                         break;
 
                     case MIRROR_TOP_BOTTOM:
-                        image = ManipulateImage.rotate(ManipulateImage.mirror(ManipulateImage.rotate(image, +1)), -1);
+                        image = ManipulateImage.rotate(ManipulateImage.mirror(
+                                ManipulateImage.rotate(image, +1)), -1);
                         break;
 
                     case ANTICLOCKWISE_AND_MIRROR:
@@ -222,8 +224,9 @@ public class FileCopier {
                 image = ManipulateImage.make3ByteBgr(image);
             }
 
-            // Remove any border around the image if necessary
-            if (theConfiguration.removeBorder()) {
+            // Remove any border around the image if necessary.  This is not
+            // yet fully implemented
+            if (theConfiguration.isSet(Option.REMOVE_BORDER)) {
                 BorderProcessor borderProcessor = new BorderProcessor(image);
                 if (borderProcessor.hasBorder()) {
                     image = borderProcessor.removeBorder();
@@ -240,33 +243,43 @@ public class FileCopier {
 
             double size = image.getHeight() * ANNOTATION_SIZE;
 
-            if (theConfiguration.annotateImageWithDirectory()) {
+            if (theConfiguration.isSet(Option.NO_DIRECTORY_NAME)) {
                 double xoffset = image.getHeight() * ANNOTATION_SIZE;
                 double yoffset = image.getHeight() * ANNOTATION_SIZE;
-                graphics2d.setFont(new Font("TimesRoman", Font.PLAIN, (int) size));
+                graphics2d.setFont(new Font("TimesRoman",
+                        Font.PLAIN, (int) size));
                 graphics2d.setColor(Color.red);
                 // Add the name of the immediate containing directory to the image
-                graphics2d.drawString(originalFile.getName(originalFile.getNameCount() - 2).toString(),
+                graphics2d.drawString(originalFile.getName(originalFile.
+                        getNameCount() - 2).toString(),
                         (int) xoffset, (int) yoffset);
             }
 
             String indexText = "";
-            if (theConfiguration.getShowFilename()) {
+            if (theConfiguration.isSet(Option.SHOW_FILENAME)) {
                 // Want debugging info on image
                 indexText = originalFile.getFileName().toString();
-                indexText += hint;
             }
 
-            if (theConfiguration.getShowDate()) {
+            if (theConfiguration.isSet(Option.SHOW_INDEX)) {
+                if (!indexText.isBlank()) {
+                    indexText += " ";
+                }
+                indexText += String.format("%06d", index);
+            }
+
+            if (theConfiguration.isSet(Option.SHOW_DATE)) {
                 String theDate = new ExifDateReader(originalFile).getDate();
                 if (!theDate.isEmpty()) {
-                    indexText += " " + theDate;
+                    if (!indexText.isBlank()) {
+                        indexText += " ";
+                    }
+                    indexText += theDate;
                 }
             }
 
             // Add text to the bottom of the image if required
             if (!indexText.isEmpty()) {
-
                 double xoffset = image.getHeight() * ANNOTATION_SIZE;
                 double yoffset = image.getHeight() * ANNOTATION_SIZE;
                 double x = xoffset;
@@ -274,7 +287,7 @@ public class FileCopier {
                 graphics2d.setFont(new Font("TimesRoman", Font.PLAIN, (int) size / 2));
                 graphics2d.drawString(indexText, (int) x, (int) y);
             }
-            if (theConfiguration.isVerboseMode()) {
+            if (theConfiguration.isSet(Option.VERBOSE)) {
                 System.out.println("Writing " + outputFile);
             }
             ImageIO.write(image, "jpg", outputFile);

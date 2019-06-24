@@ -19,17 +19,20 @@ import java.util.logging.Logger;
  * 1.003 - Add some changes for detecting borders around photos 
  * 
  * 1.004 - Fix --showfilename, display command line
- *
+ * 
+ * 1.005 - Add --showIndex
  *
  * @author Jason Leake
  */
 public class Fram {
 
-    private static final String VERSION = "1.004";
+    private static final String VERSION = "1.005";
     private static final Logger logger = Logger.getLogger(Fram.class.getName());
     private ProcessFiles processFiles;
 
     /**
+     * Entry point
+     * 
      * @param args the command line arguments
      */
     public static void main(String[] args) {
@@ -112,6 +115,7 @@ public class Fram {
     private boolean runMainProgram(String input, String output,
             Options options) {
         ElapsedTime timer = new ElapsedTime();
+        System.out.println();
         System.out.println("Starting at " + DateAndTimeNow.get());
 
         Configuration configuration = new Configuration();

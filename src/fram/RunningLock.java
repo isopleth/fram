@@ -13,7 +13,7 @@ import java.util.logging.Logger;
 class RunningLock {
 
     private boolean myLock = false;
-    private File lockFile = new File("fram.lock");
+    private final File lockFile = new File("fram.lock");
 
     /**
      * Constructor
@@ -39,6 +39,9 @@ class RunningLock {
         return !myLock;
     }
 
+   /**
+    * Delete lock
+    */
     void delete() {
         lockFile.delete();
     }

@@ -3,6 +3,8 @@ package fram.filesystem;
 import fram.Cache;
 import fram.CheckProgramNeedsRunning;
 import fram.Configuration;
+import fram.Options.Option;
+import static fram.Options.Option.MINIMUM_WIDTH;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -32,7 +34,7 @@ public class ProcessFiles {
      */
     public void run() {
         boolean runTheMainProgramCode = false;
-        if (theConfiguration.checkFirst()) {
+        if (theConfiguration.isSet(Option.CHECK)) {
             try {
                 checker = new CheckProgramNeedsRunning(theConfiguration);
                 if (checker.changed()) {
@@ -49,7 +51,7 @@ public class ProcessFiles {
             try {
                 deleteExistingFiles(theConfiguration.getOutputDirectory());
                 Cache cache = null;
-                if (theConfiguration.getCache()) {
+                if (theConfiguration.isSet(Option.CACHE)) {
                     cache = new Cache();
                 }
                 walker = new Walker(theConfiguration, cache);

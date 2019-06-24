@@ -34,7 +34,7 @@ final public class CheckProgramNeedsRunning implements FileVisitor<Path> {
      * Constructor
      *
      * @param configuration
-     * @param messagesBuffer
+     * @throws java.io.IOException
      */
     public CheckProgramNeedsRunning(Configuration configuration) throws IOException {
         theConfiguration = configuration;
@@ -82,6 +82,9 @@ final public class CheckProgramNeedsRunning implements FileVisitor<Path> {
             }
         }
 
+        if (text.isEmpty()) {
+            text = "(blank)";
+        }
         System.out.println(String.format("old count is %s", text));
 
         newText = "count = " + count;

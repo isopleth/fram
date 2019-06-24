@@ -8,82 +8,146 @@ import java.util.Map;
  *
  * @author Jason Leake
  */
-class Options {
+public class Options {
 
-    enum Option {
-        VERBOSE, CHECK, SHOW_FILENAME, NO_ROTATE_IMAGES, SHOW_DATE,
+    private static final boolean DEBUG = false;
+    
+    public enum Option {
+        VERBOSE, CHECK, SHOW_INDEX, SHOW_FILENAME, NO_ROTATE_IMAGES, SHOW_DATE,
         NO_DIRECTORY_NAME, REMOVE_BORDER, CACHE, MINIMUM_WIDTH;
-        private static final Map<String, Option> keywords = new HashMap<>();
+    };
 
-        static {
-            // These must all be lower case
-            keywords.put("--verbose", VERBOSE);
-            keywords.put("--check", CHECK);
-            keywords.put("--showfilename", SHOW_FILENAME);
-            keywords.put("--norotate", NO_ROTATE_IMAGES);
-            keywords.put("--date", SHOW_DATE);
-            keywords.put("--nodirectory", NO_DIRECTORY_NAME);
-            keywords.put("--cache", CACHE);
-            keywords.put("--minimumwidth", MINIMUM_WIDTH);
-            keywords.put("--removeborder", REMOVE_BORDER);
+    /**
+     * This inner class maps the command line string to the option enumeration,
+     * and the option enumeration to the textual description of the option along
+     * with the default value if it is not specified.
+     */
+    private static class KnownOptions {
 
-        }
+        private final static Map<String, Option> options = new HashMap<>();
+        private final static Map<Option, String> descriptions = new HashMap<>();
+        private final static Map<Option, Integer> defaultValue = new HashMap<>();
+        private final static Map<Option, Boolean> defaultPresent = new HashMap<>();
 
-        private String description() {
-            switch (this) {
-                case VERBOSE:
-                    return "Describe what is happening";
-                case CHECK:
-                    return "Only run main processing if number of input files changed";
-                case SHOW_FILENAME:
-                    return "Annotate images with input filename";
-                case NO_ROTATE_IMAGES:
-                    return "Don't rotate output files according to their metadata";
-                case SHOW_DATE:
-                case NO_DIRECTORY_NAME:
-                    return "Do not annotate images with directory name";
-                case CACHE:
-                    return "Use cache";
-                case MINIMUM_WIDTH:
-                    return "Specify minimum width for image";
-                case REMOVE_BORDER:
-                    return "Remove any white border around images";
-                default:
-                    return "Unknown enum!";
-            }
+        /**
+         * This is for options that carry a numeric value
+         *
+         * @param optionString command line option
+         * @param option option enumeration
+         * @param description text description of option
+         * @param defaultVal default value
+         */
+        private static void put(String optionString,
+                Option option,
+                String description,
+                Integer defaultVal) {
+            descriptions.put(option, description);
+            options.put(optionString.toLowerCase(), option);
+            defaultPresent.put(option, true);
+            defaultValue.put(option, defaultVal);
         }
 
         /**
-         * Convert keyword to option enumeration
+         * This is for options that are present or not present
          *
-         * @param keyword keyword to check
-         * @return option enumeration, or null if there isn't one
+         * @param optionString command line option
+         * @param option option enumeration
+         * @param description text description of option
+         * @param defaultPres true if default is that it is present
          */
-        public static Option keywordToOption(String keyword) {
-            keyword = keyword.toLowerCase();
-            if (keywords.containsKey(keyword)) {
-                return keywords.get(keyword);
+        private static void put(String optionString,
+                Option option,
+                String description,
+                Boolean defaultPres) {
+            descriptions.put(option, description);
+            options.put(optionString.toLowerCase(), option);
+            defaultPresent.put(option, defaultPres);
+        }
+
+        /**
+         * Get the text description of the option
+         *
+         * @param option the option
+         * @return text description of the option
+         */
+        public final String getDescription(Option option) {
+            if (descriptions.containsKey(option)) {
+                return descriptions.get(option);
+            } else {
+                // Oops
+                return "No description for option " + option + "!";
+            }
+        }
+
+        public final Option translateOptionString(String optionString) {
+            optionString = optionString.toLowerCase();
+            if (options.containsKey(optionString)) {
+                return options.get(optionString);
             }
             return null;
         }
+
+        private Boolean getDefaultPresent(Option option) {
+            if (defaultPresent.containsKey(option)) {
+                return defaultPresent.get(option);
+            }
+            System.err.println("getDefaultPresent - unknown option " + option);
+            return false;
+        }
+
+        private Integer getDefaultValue(Option option) {
+            if (defaultValue.containsKey(option)) {
+                return defaultValue.get(option);
+            }
+            System.err.println("getDefaultValue- unknown option " + option);
+            return 0;
+        }
+
+        static private final String DESC_VERBOSE = "Describe what is happening";
+        static private final String DESC_CHECK = "Only run main processing if number of input files changed";
+        static private final String DESC_SHOW_FILENAME = "Annotate images with input filename";
+        static private final String DESC_NO_DIRECTORY_NAME = "Don't show directory name in annotation";
+        static private final String DESC_SHOW_INDEX = "Show output file index number";
+        static private final String DESC_NO_ROTATE = "Don't rotate output files according to their metadata";
+        static private final String DESC_SHOW_DATE = "Show date that photo was taken or scanned";
+        static private final String DESC_CACHE = "Use cache";
+        static private final String DESC_MIN_WIDTH = "Specify minimum width for image";
+        static private final String DESC_REMOVE_BORDER = "Remove any white border around images";
+
+        static {
+            // These are the command line options that are recognised
+            put("--cache", Option.CACHE, DESC_CACHE, false);
+            put("--check", Option.CHECK, DESC_CHECK, false);
+            put("--date", Option.SHOW_DATE, DESC_SHOW_DATE, false);
+            put("--minimumWidth", Option.MINIMUM_WIDTH, DESC_MIN_WIDTH, 5656);
+            put("--noDirectory", Option.NO_DIRECTORY_NAME, DESC_NO_DIRECTORY_NAME, true);
+            put("--noRotate", Option.NO_ROTATE_IMAGES, DESC_NO_ROTATE, false);
+            put("--removeBorder", Option.REMOVE_BORDER, DESC_REMOVE_BORDER, false);
+            put("--showFilename", Option.SHOW_FILENAME, DESC_SHOW_FILENAME, false);
+            put("--showIndex", Option.SHOW_INDEX, DESC_SHOW_INDEX, false);
+            put("--verbose", Option.VERBOSE, DESC_VERBOSE, false);
+        }
+
     }
 
-    private final Map<Option, Integer> options = new HashMap<>();
+    static private final KnownOptions KNOWN_OPTIONS = new KnownOptions();
+
+    // These are the settings of the options
+    private final Map<Option, Boolean> optionSetting = new HashMap<>();
+    private final Map<Option, Integer> optionValues = new HashMap<>();
 
     /**
      * Constructor
      *
      */
     public Options() {
-        options.put(Option.VERBOSE, 0);
-        options.put(Option.CHECK, 0);
-        options.put(Option.SHOW_FILENAME, 0);
-        options.put(Option.NO_ROTATE_IMAGES, 0);
-        options.put(Option.SHOW_DATE, 0);
-        options.put(Option.NO_DIRECTORY_NAME, 1);
-        options.put(Option.REMOVE_BORDER, 1);
-        options.put(Option.CACHE, 0);
-        options.put(Option.MINIMUM_WIDTH, 5656);
+        // Set to default settings
+        for (Option option : Option.values()) {
+            optionSetting.put(option, KNOWN_OPTIONS.getDefaultPresent(option));
+            if (optionValues.containsKey(option)) {
+                optionValues.put(option, KNOWN_OPTIONS.getDefaultValue(option));
+            }
+        }
     }
 
     /**
@@ -95,33 +159,39 @@ class Options {
      */
     boolean parseOption(String arg) {
         boolean found = false;
+
         System.out.print(pad(arg, 30));
         String keyword = arg.replaceAll("=.*$", "");
 
+        boolean optionPresent = false;
+        Integer numericValue = null;
         if (keyword.startsWith("--")) {
-            int numericValue = 1;
+            // Contains a value, which can be the actual value or a T/F
             if (arg.contains("=")) {
                 String value = arg.replaceAll("^.*=", "");
                 if (value.equalsIgnoreCase("T")) {
-                    value = "1";
-
+                    optionPresent = true;
                 } else if (value.equalsIgnoreCase("F")) {
-                    value = "0";
+                    optionPresent = false;
+                } else {
+                    try {
+                        numericValue = Integer.parseInt(value);
+                    } catch (NumberFormatException e) {
+                        System.out.println("Invalid option value " + value);
+                        numericValue = 0;
+                    }
                 }
-
-                try {
-                    numericValue = Integer.parseInt(value);
-
-                } catch (NumberFormatException e) {
-                    System.out.println("Invalid option value " + value);
-                    numericValue = 0;
-
-                }
+            } else {
+                optionPresent = true;
             }
-            Option option = Option.keywordToOption(keyword);
+
+            Option option = KNOWN_OPTIONS.translateOptionString(keyword);
             if (option != null) {
-                System.out.print("   " + option.description());
-                options.put(option, numericValue);
+                System.out.print("   " + KNOWN_OPTIONS.getDescription(option));
+                optionSetting.put(option, optionPresent);
+                if (numericValue != null) {
+                    optionValues.put(option, numericValue);
+                }
                 found = true;
             } else {
                 System.out.print("    Unrecognised option " + arg);
@@ -148,17 +218,33 @@ class Options {
 
         }
         return output;
-
     }
 
     /**
-     * Get the specified option value. 1 or 0 for binary options, or a number
-     * for ones which hold a numeric value.
+     * Get the specified option logical value
      *
      * @param option the option
-     * @return value
+     * @return true if the option is set, false if it is not
      */
-    public int get(Option option) {
-        return options.containsKey(option) ? options.get(option) : 0;
+    public boolean isSet(Option option) {
+        boolean set =  optionSetting.get(option);
+        if (DEBUG && optionSetting.get(Option.VERBOSE)) {
+            System.out.println(option + " value is " + set);
+        }
+        return set;
+    }
+
+    /**
+     * Get the numeric value of an option
+     *
+     * @param option option to get value for
+     * @return option value
+     */
+    int getValue(Option option) {
+        if (!optionValues.containsKey(option)) {
+            // Option value not present, so return the default value
+            return KNOWN_OPTIONS.getDefaultValue(option);
+        }
+        return optionValues.get(option);
     }
 }

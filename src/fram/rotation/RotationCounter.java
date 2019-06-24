@@ -10,13 +10,13 @@ import java.util.Map;
  */
 public class RotationCounter {
 
-    private static Map<Orientation, Integer> rotationCounts = new HashMap<>();
+    private static final Map<Orientation, Integer> rotationCounts = new HashMap<>();
 
     /**
      * Reset all counts
      */
     public static void reset() {
-        rotationCounts = new HashMap<>();
+        rotationCounts.clear();
     }
 
     /**
@@ -26,7 +26,8 @@ public class RotationCounter {
      */
     public static void bump(Orientation imageOrientation) {
         if (rotationCounts.containsKey(imageOrientation)) {
-            rotationCounts.put(imageOrientation, rotationCounts.get(imageOrientation) + 1);
+            rotationCounts.put(imageOrientation, 
+                    rotationCounts.get(imageOrientation) + 1);
         } else {
             rotationCounts.put(imageOrientation, 1);
         }

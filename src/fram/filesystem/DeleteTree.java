@@ -32,20 +32,22 @@ class DeleteTree implements FileVisitor<Path> {
     }
 
     @Override
-    public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
+    public FileVisitResult preVisitDirectory(Path dir, 
+            BasicFileAttributes attrs) throws IOException {
         return FileVisitResult.CONTINUE;
     }
 
     @Override
-    public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+    public FileVisitResult visitFile(Path file, 
+            BasicFileAttributes attrs) throws IOException {
         count++;
         file.toFile().delete();
         return FileVisitResult.CONTINUE;
     }
 
     @Override
-    public FileVisitResult visitFileFailed(Path file, IOException exc) throws IOException {
-
+    public FileVisitResult visitFileFailed(Path file, 
+            IOException exc) throws IOException {
         return FileVisitResult.CONTINUE;
     }
 
