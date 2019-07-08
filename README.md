@@ -167,10 +167,10 @@ This produces more logging output than usual.
 
 ## Libraries
 
-The run-time libraries needed by the program are in dist/lib. Note
-that whilst these are all FOSS libraries, they are licensed 
-differently to my code.  The file licences.txt in dist/lib details
-the licences that they use.
+The run-time libraries needed by the program are in lib. Note that
+whilst these are all FOSS libraries, they are licensed differently to
+my code.  The file licences.txt in lib details the licences that they
+use.
 
 To run the ant script, which is the best way of building and testing
 the program, you will need to have ant, junit and the ant-junit

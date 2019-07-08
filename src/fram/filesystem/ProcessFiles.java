@@ -4,7 +4,6 @@ import fram.Cache;
 import fram.CheckProgramNeedsRunning;
 import fram.Configuration;
 import fram.Options.Option;
-import static fram.Options.Option.MINIMUM_WIDTH;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -131,6 +130,9 @@ public class ProcessFiles {
      * @return CheckProgramNeedsRunning object
      */
     public CheckProgramNeedsRunning getChecker() {
+        if (checker == null) {
+            System.out.println("Returning an empty checker");
+        }
         return checker;
     }
 

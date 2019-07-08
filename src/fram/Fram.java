@@ -10,17 +10,19 @@ import java.util.logging.Logger;
  *
  * Version history:
  *
- * 1.000 - Original 
- * 
- * 1.001 - Cache and unit tests know about 
- * 
- * 1.002 - Allow user to set minimum image size 
- * 
- * 1.003 - Add some changes for detecting borders around photos 
- * 
- * 1.004 - Fix --showfilename, display command line
- * 
+ * 1.000 - Original
+ *
+ * 1.001 - Cache and unit tests know about
+ *
+ * 1.002 - Allow user to set minimum image size
+ *
+ * 1.003 - Add some changes for detecting borders around photos
+ *
+ * 1.004 - Fix --showFilename, display command line
+ *
  * 1.005 - Add --showIndex
+ * 
+ * 1.006 - Clear --cache if --showIndex is set
  *
  * @author Jason Leake
  */
@@ -30,9 +32,11 @@ public class Fram {
     private static final Logger logger = Logger.getLogger(Fram.class.getName());
     private ProcessFiles processFiles;
 
+    public Options options = new Options();
+
     /**
      * Entry point
-     * 
+     *
      * @param args the command line arguments
      */
     public static void main(String[] args) {
@@ -70,11 +74,11 @@ public class Fram {
             System.out.println("Already running");
             return false;
         }
-        Options options = new Options();
         // Parse command line
         String input = "";
         String output = "";
         System.out.println();
+
         try {
             for (String arg : args) {
 
@@ -89,13 +93,20 @@ public class Fram {
                 }
             }
 
+            // Check for internal consistency of options
+            if (!options.checkOptionsConsistent()) {
+                System.out.println("Terminating program");
+                return false;
+            }
+
             if (output.isEmpty()) {
                 System.out.println("No output directory specified");
                 new DoHelp().help();
                 return false;
-            } else {
-                return runMainProgram(input, output, options);
             }
+
+            return runMainProgram(input, output, options);
+
         } finally {
             lock.delete();
         }
@@ -133,6 +144,8 @@ public class Fram {
             System.out.println("Rotations - " + RotationCounter.getRotationCounts());
             System.out.println("Finishing at " + DateAndTimeNow.get());
             timer.reportElapsedTime("Complete");
+        } else {
+            System.out.println("Configuration not OK");
         }
         return ok;
     }

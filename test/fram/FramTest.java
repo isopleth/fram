@@ -1,7 +1,6 @@
 package fram;
 
 import fram.rotation.RotationCounter;
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashSet;
@@ -46,7 +45,7 @@ public class FramTest {
 
     @Before
     public void setUp() {
-        File outputDir = new File(outputDirectory);
+        var outputDir = new File(outputDirectory);
         if (outputDir.exists()) {
             delete(outputDir);
         }
@@ -56,15 +55,15 @@ public class FramTest {
         if (testHasBeenRun) {
             assertTrue("Delete output directory", delete(outputDir));
 
-            String runDirectory = System.getProperty("user.dir");
-            File copyList = new File(runDirectory, "copy_list.txt");
-            File exclusionList = new File(runDirectory, "exclusion_list.txt");
+            var runDirectory = System.getProperty("user.dir");
+            var copyList = new File(runDirectory, "copy_list.txt");
+            var exclusionList = new File(runDirectory, "exclusion_list.txt");
             assertTrue("delete copy list - " + copyList.getAbsolutePath(),
                     copyList.delete());
             assertTrue("delete exclusion list - " + exclusionList.getAbsolutePath(),
                     exclusionList.delete());
 
-            File cacheDirectory = new File("framcache");
+            var cacheDirectory = new File("framcache");
             assertTrue("cache directory", delete(cacheDirectory));
         }
     }
@@ -82,7 +81,7 @@ public class FramTest {
      */
     boolean delete(File fileToDelete) {
         if (fileToDelete.isDirectory()) {
-            for (File file : fileToDelete.listFiles()) {
+            for (var file : fileToDelete.listFiles()) {
                 if (!delete(file)) {
                     return false;
                 }
@@ -103,9 +102,9 @@ public class FramTest {
     private void run(String[] args) {
         try {
             assertTrue("Run program", new Fram().runProgram(args));
-            File outputDir = new File(outputDirectory);
+            var outputDir = new File(outputDirectory);
             // Check that the newly created directory exists
-            File createdDir = new File(outputDir, "000000");
+            var createdDir = new File(outputDir, "000000");
             assertTrue(String.format("%s created", createdDir.getAbsolutePath()),
                     createdDir.exists());
             assertTrue(String.format("%s is a directory", createdDir.getAbsolutePath()),
@@ -114,11 +113,11 @@ public class FramTest {
 
             // Check all of the expected output files are present.
             Set<String> expectedfiles = new HashSet<>();
-            for (int index = 0; index < 10; index++) {
+            for (var index = 0; index < 10; index++) {
                 expectedfiles.add(String.format("%06d.jpg", index));
             }
 
-            for (File file : listOfFiles) {
+            for (var file : listOfFiles) {
                 if (file.isFile()) {
                     assertTrue(String.format("%s exists", file.getName()),
                             expectedfiles.contains(file.getName()));
@@ -141,8 +140,8 @@ public class FramTest {
      * @param counts array of expected rotation for each orientation change
      */
     private void checkRotations(int[] counts) {
-        String actualRotations = RotationCounter.getRotationCounts();
-        String expectedRotations = RotationCounter.makeRotationCounts(counts);
+        var actualRotations = RotationCounter.getRotationCounts();
+        var expectedRotations = RotationCounter.makeRotationCounts(counts);
         if (!actualRotations.equals(expectedRotations)) {
             System.out.println("Actual: " + actualRotations);
             System.out.println("Expected: " + expectedRotations);
@@ -160,13 +159,13 @@ public class FramTest {
     private void announce(String title) {
         System.out.println();
         System.out.println();
-        for (int count = 0; count < title.length(); count++) {
+        for (var count = 0; count < title.length(); count++) {
             System.out.print("-");
 
         }
         System.out.println();
         System.out.println(title);
-        for (int count = 0; count < title.length(); count++) {
+        for (var count = 0; count < title.length(); count++) {
             System.out.print("-");
 
         }
@@ -232,18 +231,20 @@ public class FramTest {
     public void testCheckOption() {
         announce("test check output directory needs regenerating");
         subAnnounce("Delete check file, if it exists");
-        String name = CheckProgramNeedsRunning.generateName(inputDirectory);
-        File checkFile = new File(System.getProperty("user.dir"), name);
+        var name = CheckProgramNeedsRunning.generateName(inputDirectory);
+        var checkFile = new File(System.getProperty("user.dir"), name);
         checkFile.delete();
 
         subAnnounce("Run program. Files will be regenerated since nothing to compare against");
-        Fram fram = new Fram();
-        fram.runProgram(new String[]{inputDirectory, outputDirectory, "--verbose", "--check"});
+        var fram = new Fram();
+        fram.runProgram(new String[]{inputDirectory, outputDirectory, 
+            "--verbose", "--check"});
         assertTrue("Renegerated files", fram.getProcessor().getChecker().getChangedFlag());
 
         subAnnounce("Run program again. Should not need regenerating");
         fram = new Fram();
-        fram.runProgram(new String[]{inputDirectory, outputDirectory, "--verbose", "--check"});
+        fram.runProgram(new String[]{inputDirectory, outputDirectory, 
+            "--verbose", "--check"});
         assertFalse("Renegerated files", fram.getProcessor().getChecker().getChangedFlag());
     }
 
@@ -259,13 +260,13 @@ public class FramTest {
         checkFile.delete();
 
         subAnnounce("Run program. Files will be regenerated since nothing to compare against");
-        Fram fram = new Fram();
+        var fram = new Fram();
         fram.runProgram(new String[]{inputDirectory, outputDirectory, "--verbose",
             "--check", "--minimumwidth=1024"});
         assertTrue("Renegerated files", fram.getProcessor().getChecker().getChangedFlag());
-        for (File file : getOutputFiles()) {
+        for (var file : getOutputFiles()) {
             try {
-                int imageWidth = getImageWidth(file);
+                var imageWidth = getImageWidth(file);
                 assertTrue(String.format(Locale.UK,
                         "%d >= 1024", imageWidth), imageWidth >= 1024);
                 // Some of the original images are 5152 pixels wide
@@ -281,7 +282,7 @@ public class FramTest {
         fram = new Fram();
         fram.runProgram(new String[]{inputDirectory, outputDirectory, "--verbose",
             "--check", "--minimumwidth=4024"});
-        for (File file : getOutputFiles()) {
+        for (var file : getOutputFiles()) {
             try {
                 int imageWidth = getImageWidth(file);
                 assertTrue(String.format(Locale.UK,
@@ -304,13 +305,14 @@ public class FramTest {
     public void testShowFilenameOption() {
         announce("test show filename option");
         subAnnounce("Delete check file, if it exists");
-        String name = CheckProgramNeedsRunning.generateName(inputDirectory);
-        File checkFile = new File(System.getProperty("user.dir"), name);
+        var name = CheckProgramNeedsRunning.generateName(inputDirectory);
+        var checkFile = new File(System.getProperty("user.dir"), name);
         checkFile.delete();
 
         subAnnounce("Run program. Files should be regenerated since no check file present.");
-        Fram fram = new Fram();
-        fram.runProgram(new String[]{inputDirectory, outputDirectory, "--verbose", "--check", "--showFilename"});
+        var fram = new Fram();
+        fram.runProgram(new String[]{inputDirectory, outputDirectory, 
+            "--verbose", "--check", "--showFilename"});
         assertTrue("Renegerated files", fram.getProcessor().getChecker().getChangedFlag());
     }
 
@@ -322,14 +324,29 @@ public class FramTest {
     public void testIndexOption() {
         announce("test show index number option");
         subAnnounce("Delete check file, if it exists");
-        String name = CheckProgramNeedsRunning.generateName(inputDirectory);
-        File checkFile = new File(System.getProperty("user.dir"), name);
+        var name = CheckProgramNeedsRunning.generateName(inputDirectory);
+        var checkFile = new File(System.getProperty("user.dir"), name);
         checkFile.delete();
 
         subAnnounce("Run program. Files should be regenerated since no check file present.");
-        Fram fram = new Fram();
+        var fram = new Fram();
         fram.runProgram(new String[]{inputDirectory, outputDirectory, "--verbose", "--check", "--showIndex"});
         assertTrue("Renegerated files", fram.getProcessor().getChecker().getChangedFlag());
+    }
+
+    /**
+     * Test that --showIndex and --cache causes --cache to be cancelled
+     */
+    @Test
+    public void testShowIndexCache() {
+        announce("test show index suppresses the cache option");
+        subAnnounce("Delete check file, if it exists");
+
+        var fram = new Fram();
+        fram.runProgram(new String[]{inputDirectory, outputDirectory,
+            "--verbose", "--cache", "--showIndex"});
+        assertTrue("Cache suppressed", !fram.options.isSet(Options.Option.CACHE)
+                && fram.options.isSet(Options.Option.SHOW_INDEX));
     }
 
     /**
@@ -338,8 +355,8 @@ public class FramTest {
      * @return list of output files
      */
     private File[] getOutputFiles() {
-        File outputDir = new File(outputDirectory);
-        File createdDir = new File(outputDir, "000000");
+        var outputDir = new File(outputDirectory);
+        var createdDir = new File(outputDir, "000000");
         return createdDir.listFiles();
     }
 
@@ -351,8 +368,8 @@ public class FramTest {
      * @throws IOException
      */
     private int getImageWidth(File file) throws IOException {
-        BufferedImage bimg = ImageIO.read(file);
-        return bimg.getWidth();
+        var bufferedImage = ImageIO.read(file);
+        return bufferedImage.getWidth();
     }
 
 }

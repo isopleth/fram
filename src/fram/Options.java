@@ -87,6 +87,12 @@ public class Options {
             return null;
         }
 
+        /**
+         * Check if the default value is to be used for the specified option
+         * 
+         * @param option option to check
+         * @return true if the default value is to be used
+         */
         private Boolean getDefaultPresent(Option option) {
             if (defaultPresent.containsKey(option)) {
                 return defaultPresent.get(option);
@@ -95,6 +101,11 @@ public class Options {
             return false;
         }
 
+        /**
+         * Get the default value for the specified option
+         * @param option the option to get the value for
+         * @return default value for option
+         */
         private Integer getDefaultValue(Option option) {
             if (defaultValue.containsKey(option)) {
                 return defaultValue.get(option);
@@ -103,29 +114,29 @@ public class Options {
             return 0;
         }
 
-        static private final String DESC_VERBOSE = "Describe what is happening";
-        static private final String DESC_CHECK = "Only run main processing if number of input files changed";
-        static private final String DESC_SHOW_FILENAME = "Annotate images with input filename";
-        static private final String DESC_NO_DIRECTORY_NAME = "Don't show directory name in annotation";
-        static private final String DESC_SHOW_INDEX = "Show output file index number";
-        static private final String DESC_NO_ROTATE = "Don't rotate output files according to their metadata";
-        static private final String DESC_SHOW_DATE = "Show date that photo was taken or scanned";
-        static private final String DESC_CACHE = "Use cache";
-        static private final String DESC_MIN_WIDTH = "Specify minimum width for image";
-        static private final String DESC_REMOVE_BORDER = "Remove any white border around images";
+        static private final String DESCR_VERBOSE = "Describe what is happening";
+        static private final String DESCR_CHECK = "Only run main processing if number of input files changed";
+        static private final String DESCR_SHOW_FILENAME = "Annotate images with input filename";
+        static private final String DESCR_NO_DIRECTORY_NAME = "Don't show directory name in annotation";
+        static private final String DESCR_SHOW_INDEX = "Show output file index number";
+        static private final String DESCR_NO_ROTATE = "Don't rotate output files according to their metadata";
+        static private final String DESCR_SHOW_DATE = "Show date that photo was taken or scanned";
+        static private final String DESCR_CACHE = "Use cache";
+        static private final String DESCR_MIN_WIDTH = "Specify minimum width for image";
+        static private final String DESCR_REMOVE_BORDER = "Remove any white border around images";
 
         static {
             // These are the command line options that are recognised
-            put("--cache", Option.CACHE, DESC_CACHE, false);
-            put("--check", Option.CHECK, DESC_CHECK, false);
-            put("--date", Option.SHOW_DATE, DESC_SHOW_DATE, false);
-            put("--minimumWidth", Option.MINIMUM_WIDTH, DESC_MIN_WIDTH, 5656);
-            put("--noDirectory", Option.NO_DIRECTORY_NAME, DESC_NO_DIRECTORY_NAME, true);
-            put("--noRotate", Option.NO_ROTATE_IMAGES, DESC_NO_ROTATE, false);
-            put("--removeBorder", Option.REMOVE_BORDER, DESC_REMOVE_BORDER, false);
-            put("--showFilename", Option.SHOW_FILENAME, DESC_SHOW_FILENAME, false);
-            put("--showIndex", Option.SHOW_INDEX, DESC_SHOW_INDEX, false);
-            put("--verbose", Option.VERBOSE, DESC_VERBOSE, false);
+            put("--cache", Option.CACHE, DESCR_CACHE, false);
+            put("--check", Option.CHECK, DESCR_CHECK, false);
+            put("--date", Option.SHOW_DATE, DESCR_SHOW_DATE, false);
+            put("--minimumWidth", Option.MINIMUM_WIDTH, DESCR_MIN_WIDTH, 5656);
+            put("--noDirectory", Option.NO_DIRECTORY_NAME, DESCR_NO_DIRECTORY_NAME, true);
+            put("--noRotate", Option.NO_ROTATE_IMAGES, DESCR_NO_ROTATE, false);
+            put("--removeBorder", Option.REMOVE_BORDER, DESCR_REMOVE_BORDER, false);
+            put("--showFilename", Option.SHOW_FILENAME, DESCR_SHOW_FILENAME, false);
+            put("--showIndex", Option.SHOW_INDEX, DESCR_SHOW_INDEX, false);
+            put("--verbose", Option.VERBOSE, DESCR_VERBOSE, false);
         }
 
     }
@@ -215,7 +226,6 @@ public class Options {
 
         while (output.length() < desiredLength) {
             output += " ";
-
         }
         return output;
     }
@@ -247,4 +257,21 @@ public class Options {
         }
         return optionValues.get(option);
     }
+    
+    /**
+     * Check internal consistency of options
+     * 
+     * @return true if options consistent, false on error
+     */
+    boolean checkOptionsConsistent() {
+        if (isSet(Option.CACHE) && isSet(Option.SHOW_INDEX)) {
+            // Show index disables the cache because the images generated have
+            // to contain the index number for this particular run, and these
+            // will be different in other runs since they are randomly generated
+             optionSetting.put(Option.CACHE, false);
+            System.out.println("Clearing --cache because --showIndex is present");
+        }
+        return true;
+    }
+    
 }

@@ -3,7 +3,6 @@ package fram.filesystem;
 import fram.Cache;
 import fram.Configuration;
 import fram.DateAndTimeNow;
-import fram.Options;
 import fram.Options.Option;
 import fram.OutputFileIndexGenerator;
 import java.io.BufferedReader;
