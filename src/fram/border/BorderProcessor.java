@@ -17,9 +17,9 @@ public class BorderProcessor {
     private ArrayList<BorderChecker> columnColours = new ArrayList<>();
 
     /**
-     * constructor
+     * Constructor
      *
-     * @param image
+     * @param image image to process
      */
     public BorderProcessor(BufferedImage image) {
         theImage = image;
@@ -99,6 +99,12 @@ public class BorderProcessor {
         return false;
     }
 
+    /**
+     * Remove the border around the image.  NOT IMPLEMENTED YET, SO RETURNS IMAGE
+     * UNMODITIFIED.
+     *
+     * @return image
+     */
     public BufferedImage removeBorder() {
         return theImage;
     }

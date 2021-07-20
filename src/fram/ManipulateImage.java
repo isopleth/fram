@@ -38,9 +38,9 @@ public class ManipulateImage {
     /**
      * Resize image so that it has width of newWidth
      *
-     * @param image
+     * @param image input image
      * @param newWidth new image width in pixels
-     * @return resized image
+     * @return resized output image
      */
     public static BufferedImage resizeImage(BufferedImage image, int newWidth) {
 

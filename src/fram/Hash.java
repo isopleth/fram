@@ -27,7 +27,7 @@ public class Hash {
      * Constructor Re-uses message digest class.
      *
      * @param config program configuration
-     * @throws NoSuchAlgorithmException
+     * @throws NoSuchAlgorithmException exception thrown if SHA-256 hash is not available
      */
     public Hash(Configuration config) throws NoSuchAlgorithmException {
         theConfiguration = config;

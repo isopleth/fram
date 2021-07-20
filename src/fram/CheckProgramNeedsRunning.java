@@ -33,8 +33,8 @@ final public class CheckProgramNeedsRunning implements FileVisitor<Path> {
     /**
      * Constructor
      *
-     * @param configuration
-     * @throws java.io.IOException
+     * @param configuration program configuration - command line options etc
+     * @throws java.io.IOException thrown if getInputDirectory() fails
      */
     public CheckProgramNeedsRunning(Configuration configuration) throws IOException {
         theConfiguration = configuration;
@@ -140,7 +140,7 @@ final public class CheckProgramNeedsRunning implements FileVisitor<Path> {
      * of the program run so we need a unique name. The name is generated from
      * the name of the input directory.
      *
-     * @param inputDirectory
+     * @param inputDirectory input directory path
      * @return name corresponding to input directory
      */
     public static String generateName(String inputDirectory) {

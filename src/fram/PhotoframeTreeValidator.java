@@ -53,10 +53,10 @@ public class PhotoframeTreeValidator implements FileVisitor<Path> {
     /**
      * Called just before any directory is visited. It does nothing.
      *
-     * @param dir
-     * @param attrs
+     * @param dir directory about to be visited
+     * @param attrs directory attributes
      * @return CONTINUE always
-     * @throws IOException
+     * @throws IOException This exception is never thrown
      */
     @Override
     public FileVisitResult preVisitDirectory(Path dir, 
@@ -99,10 +99,10 @@ public class PhotoframeTreeValidator implements FileVisitor<Path> {
     /**
      * Called after each directory is visited. It does nothing.
      *
-     * @param dir
-     * @param exc
-     * @return
-     * @throws IOException
+     * @param dir directory just visited
+     * @param exc I/O exception that prevented the file from being visited, if any
+     * @return FileVisitResult.CONTINUE always
+     * @throws IOException This exception is never thrown
      */
     @Override
     public FileVisitResult postVisitDirectory(Path dir, 

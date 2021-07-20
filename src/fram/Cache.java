@@ -308,8 +308,6 @@ public class Cache {
     /**
      *
      * Create a file in the cache directory - just for test purpose
-     *
-     * @param file
      */
     public void createTestFile() {
         File outputFile = makeOutputFile();

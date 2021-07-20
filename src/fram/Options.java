@@ -11,10 +11,62 @@ import java.util.Map;
 public class Options {
 
     private static final boolean DEBUG = false;
-    
+
+    /**
+     * Command line options
+     * {@link #VERBOSE}
+     * {@link #CHECK}
+     * {@link #SHOW_INDEX} 
+     * {@link #SHOW_FILENAME} 
+     * {@link #NO_ROTATE_IMAGES} 
+     * {@link #SHOW_DATE}
+     * {@link #NO_DIRECTORY_NAME} 
+     * {@link #REMOVE_BORDER} 
+     * {@link #CACHE} 
+     * {@link #MINIMUM_WIDTH}
+     */
     public enum Option {
-        VERBOSE, CHECK, SHOW_INDEX, SHOW_FILENAME, NO_ROTATE_IMAGES, SHOW_DATE,
-        NO_DIRECTORY_NAME, REMOVE_BORDER, CACHE, MINIMUM_WIDTH;
+	/**
+	 * Verbose logging
+	 */
+        VERBOSE,
+	/**
+	 *
+	 */
+	CHECK,
+	/**
+	 * Print index number on each photo
+	 */
+	SHOW_INDEX,
+	/**
+	 * Print filename on each photo
+	 */
+	SHOW_FILENAME,
+	/**
+	 * Don't rotate any images
+	 */
+	NO_ROTATE_IMAGES,
+	/**
+	 * Show date metadata on each photo
+	 */
+	SHOW_DATE,
+	/**
+	 * Don't show directory name on photos
+	 */
+        NO_DIRECTORY_NAME,
+	/**
+	 * Remove borders from photos.  This has not been properly implemented
+	 * yet.
+	 */
+	REMOVE_BORDER,
+	/**
+	 * Use cache for unchanged photos to reduce processing time
+	 */
+	CACHE,
+	/**
+	 * Override default minimum photo width
+	 */
+	MINIMUM_WIDTH;
     };
 
     /**

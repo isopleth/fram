@@ -98,7 +98,7 @@ public class Configuration {
      * Get input directory
      *
      * @return input directory
-     * @throws IOException
+     * @throws IOException thrown if inputDirectory.getCanonicalPath fails
      */
     public String getInputDirectory() throws IOException {
         return inputDirectory.getCanonicalPath();
@@ -108,7 +108,7 @@ public class Configuration {
      * Get output directory
      *
      * @return output directory
-     * @throws IOException
+     * @throws IOException thrown if inputDirectory.getCanonicalPath fails
      */
     public String getOutputDirectory() throws IOException {
         return outputDirectory.getCanonicalPath();
@@ -117,9 +117,9 @@ public class Configuration {
     /**
      * Get output directory
      *
-     * @param subdirectory
-     * @return output directory
-     * @throws IOException
+     * @param subdirectory subdirectory name
+     * @return output directory corresponding full path name
+     * @throws IOException Thrown if outputDirectory.getCanonicalPath fails
      */
     public String getOutputDirectory(String subdirectory) throws IOException {
         return Paths.get(outputDirectory.getCanonicalPath(),
@@ -164,6 +164,12 @@ public class Configuration {
         return true;
     }
 
+    /**
+     * Test if specified option is set/enabled
+     *
+     * @param option option to test
+     * @return true if option set, false if not set
+     */
     public boolean isSet(Option option) {
         return options.isSet(option);
     }

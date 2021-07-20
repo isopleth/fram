@@ -7,6 +7,7 @@ import com.drew.metadata.Metadata;
 import com.drew.metadata.exif.ExifIFD0Directory;
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -22,7 +23,7 @@ public class ExifDateReader {
     /**
      * Constructor
      *
-     * @param localCopyOfFile
+     * @param localCopyOfFile path of local copy of the file
      */
     public ExifDateReader(Path localCopyOfFile) {
         file = localCopyOfFile;
@@ -72,6 +73,20 @@ public class ExifDateReader {
         return date;
     }
 
+    
+    private static final Map<String, String> months = Map.ofEntries(Map.entry("1", "Jan"),
+								    Map.entry("2", "Feb"),
+								    Map.entry("3", "Mar"),
+								    Map.entry("4", "Apr"),
+								    Map.entry("5", "May"),
+								    Map.entry("6", "Jun"),
+								    Map.entry("7", "Jul"),
+								    Map.entry("8", "Aug"),
+								    Map.entry("9", "Sep"),
+								    Map.entry("10", "Oct"),
+								    Map.entry("11", "Nov"),
+								    Map.entry("12", "Dec"));
+    
     /**
      * Convert date field to month name
      *
@@ -79,37 +94,14 @@ public class ExifDateReader {
      * @return month name
      */
     private String month(String field) {
-        if (field.startsWith("0")) {
+
+	if (field.startsWith("0")) {
             field = field.replaceFirst("0", "");
         }
-        switch (field) {
-            case "1":
-                return "Jan";
-            case "2":
-                return "Feb";
-            case "3":
-                return "Mar";
-            case "4":
-                return "Apr";
-            case "5":
-                return "May";
-            case "6":
-                return "Jun";
-            case "7":
-                return "Jul";
-            case "8":
-                return "Aug";
-            case "9":
-                return "Sep";
-            case "10":
-                return "Oct";
-            case "11":
-                return "Nov";
-            case "12":
-                return "Dec";
-            default:
-                return "?" + field + "?";
-        }
+	var monthName = months.get(field);
+	if (monthName == null) {
+	   monthName = "?" + field + "?";
+	}
+	return monthName;
     }
-
 }

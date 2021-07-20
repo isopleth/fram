@@ -28,10 +28,13 @@ import java.util.logging.Logger;
  */
 public class Fram {
 
-    private static final String VERSION = "1.005";
+    private static final String VERSION = "1.006";
     private static final Logger logger = Logger.getLogger(Fram.class.getName());
     private ProcessFiles processFiles;
 
+    /**
+     * The command line options
+     */
     public Options options = new Options();
 
     /**
@@ -46,7 +49,7 @@ public class Fram {
     /**
      * This is the main entry point. It returns a boolean to make testing easier
      *
-     * @param args
+     * @param args the command line arguments
      * @return true if successful
      */
     public boolean runProgram(String[] args) {
