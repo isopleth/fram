@@ -184,3 +184,6 @@ you will need the Java runtime library.  I wrote this all using the
 [Netbeans IDE](https://netbeans.apache.org/), so you might want to
 install that too.
 
+## Building
+
+Just run ant.
