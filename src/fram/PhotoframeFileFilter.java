@@ -22,7 +22,7 @@ class PhotoframeFileFilter implements FilenameFilter {
      */
     @Override
     public boolean accept(File file, String string) {
-        Matcher matcher = regularExpression.matcher(string);
+        final var matcher = regularExpression.matcher(string);
         return matcher.find();
     }
 }

@@ -3,6 +3,7 @@ package fram;
 import fram.filesystem.ProcessFiles;
 import fram.rotation.RotationCounter;
 import java.io.File;
+import java.util.Locale;
 import java.util.logging.Logger;
 
 /**
@@ -11,24 +12,19 @@ import java.util.logging.Logger;
  * Version history:
  *
  * 1.000 - Original
- *
  * 1.001 - Cache and unit tests know about
- *
  * 1.002 - Allow user to set minimum image size
- *
  * 1.003 - Add some changes for detecting borders around photos
- *
  * 1.004 - Fix --showFilename, display command line
- *
  * 1.005 - Add --showIndex
- * 
  * 1.006 - Clear --cache if --showIndex is set
+ * 1.007 - Display heap size when program runs.  Start migration to JDK 11
  *
  * @author Jason Leake
  */
 public class Fram {
 
-    private static final String VERSION = "1.006";
+    private static final String VERSION = "1.007";
     private static final Logger logger = Logger.getLogger(Fram.class.getName());
     private ProcessFiles processFiles;
 
@@ -56,6 +52,9 @@ public class Fram {
         System.out.println("Program version " + VERSION);
 
         System.out.println();
+	System.out.println(String.format(Locale.ROOT, "Max heap size is %d bytes",
+					 Runtime.getRuntime().maxMemory()));
+
         boolean first = true;
         for (String arg : args) {
             if (first) {
@@ -72,7 +71,7 @@ public class Fram {
         RotationCounter.reset();
         // Guard against two instances of the same program running out of
         // the same directory at the same time
-        RunningLock lock = new RunningLock();
+        final var lock = new RunningLock();
         if (lock.alreadyLocked()) {
             System.out.println("Already running");
             return false;
@@ -83,7 +82,7 @@ public class Fram {
         System.out.println();
 
         try {
-            for (String arg : args) {
+            for (var arg : args) {
 
                 if (options.parseOption(arg)) {
                 } else if (input.isEmpty()) {
@@ -128,11 +127,11 @@ public class Fram {
      */
     private boolean runMainProgram(String input, String output,
             Options options) {
-        ElapsedTime timer = new ElapsedTime();
+        final var timer = new ElapsedTime();
         System.out.println();
         System.out.println("Starting at " + DateAndTimeNow.get());
 
-        Configuration configuration = new Configuration();
+        final var configuration = new Configuration();
         boolean ok = configuration.setInputDirectory(new File(input))
                 && configuration.setOutputDirectory(new File(output))
                 && configuration.setOptions(options);
