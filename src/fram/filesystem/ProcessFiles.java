@@ -32,7 +32,7 @@ public class ProcessFiles {
      * Run the processing
      */
     public void run() {
-        boolean runTheMainProgramCode = false;
+        var runTheMainProgramCode = false;
         if (theConfiguration.isSet(Option.CHECK)) {
             try {
                 checker = new CheckProgramNeedsRunning(theConfiguration);
@@ -119,7 +119,7 @@ public class ProcessFiles {
      */
     private void deleteExistingFiles(String outputDirectory) {
         System.out.println("Deleting old files");
-        DeleteTree deleteTree = new DeleteTree(outputDirectory);
+        final var deleteTree = new DeleteTree(outputDirectory);
         deleteTree.process();
         System.out.println(String.format("Deleted %d files", deleteTree.getCount()));
     }

@@ -60,9 +60,8 @@ final public class CheckProgramNeedsRunning implements FileVisitor<Path> {
         String text = "";
         try {
             bufferedReader = new BufferedReader(new FileReader(checkFile));
-            StringBuilder stringBuilder = new StringBuilder();
-            String line = bufferedReader.readLine();
-
+            final var stringBuilder = new StringBuilder();
+            var line = bufferedReader.readLine();
             while (line != null) {
                 stringBuilder.append(line);
                 line = bufferedReader.readLine();
@@ -127,7 +126,7 @@ final public class CheckProgramNeedsRunning implements FileVisitor<Path> {
     public void update() {
         if (changedFlag) {
             try {
-                BufferedWriter out = new BufferedWriter(new FileWriter(checkFile));
+                final var out = new BufferedWriter(new FileWriter(checkFile));
                 out.write(newText + "\n");
                 out.close();
             } catch (IOException e) {
@@ -149,9 +148,9 @@ final public class CheckProgramNeedsRunning implements FileVisitor<Path> {
             md = MessageDigest.getInstance("MD5");
 
             md.update(inputDirectory.getBytes());
-            byte[] digest = md.digest();
-            StringBuilder sb = new StringBuilder();
-            for (byte b : digest) {
+            final var digest = md.digest();
+            final var sb = new StringBuilder();
+            for (var b : digest) {
                 sb.append(String.format("%02x", b & 0xff));
             }
             return "check_" + sb.toString() + ".txt";

@@ -16,12 +16,12 @@ class DoHelp {
      * Display the contents of the help file
      */
     public void help() {
-        InputStream stream = getClass().getResourceAsStream(NAME);
+        final var stream = getClass().getResourceAsStream(NAME);
         if (stream == null) {
             System.out.println("File not located: " + getClass().getResource(NAME));
         } else {
             try {
-                Scanner input = new Scanner(stream);
+                final var input = new Scanner(stream);
 
                 while (input.hasNextLine()) {
                     System.out.println(input.nextLine());

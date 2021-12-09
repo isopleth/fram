@@ -134,7 +134,7 @@ class Walker implements FileVisitor<Path> {
             }
         } else {
             // Otherwise process the file.  Ignore anything which isn't a .jpg
-            String filename = file.getFileName().toString();
+            final var filename = file.getFileName().toString();
             if (filename.toLowerCase().endsWith(".jpg")) {
                 if (foundExcludeDirectoryFlag) {
                     // Skipping all files in this directory
@@ -191,10 +191,10 @@ class Walker implements FileVisitor<Path> {
         BufferedReader reader = null;
         try {
             reader = new BufferedReader(new FileReader(file.toFile()));
-            String line = reader.readLine();
+            var line = reader.readLine();
             while (line != null) {
-                Path dir = file.getParent();
-                Path skipFile = Paths.get(dir.toString(), line);
+                final var dir = file.getParent();
+                final var skipFile = Paths.get(dir.toString(), line);
                 excludeFileList.add(skipFile);
                 System.out.println(String.format("Skip file %s", skipFile.toString()));
                 line = reader.readLine();
@@ -244,16 +244,16 @@ class Walker implements FileVisitor<Path> {
      */
     public void writeExclusionListFile() {
         try {
-            BufferedWriter out = new BufferedWriter(new FileWriter("exclusion_list.txt"));
+            final var out = new BufferedWriter(new FileWriter("exclusion_list.txt"));
             SortedSet<Path> sortedSet = new TreeSet<>();
             sortedSet.addAll(excludeDirectoryList);
-            for (Path path : sortedSet) {
+            for (var path : sortedSet) {
                 out.write("directory " + path.toString() + "\n");
             }
 
             sortedSet.clear();
             sortedSet.addAll(excludeFileList);
-            for (Path path : sortedSet) {
+            for (var path : sortedSet) {
                 out.write("file " + path.toString() + "\n");
             }
 

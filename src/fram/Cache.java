@@ -83,16 +83,15 @@ public class Cache {
         if (hash != null) {
             PreparedStatement preparedStatement = null;
             try {
-                String sql = "SELECT cachedFile FROM cachedfiles WHERE filename=? AND sha256=?";
+                final var sql = "SELECT cachedFile FROM cachedfiles WHERE filename=? AND sha256=?";
                 preparedStatement = con.prepareStatement(sql);
                 preparedStatement.setString(1, file.toFile().getAbsolutePath());
                 preparedStatement.setString(2, hash);
                 // execute select SQL statement
-                ResultSet rs = preparedStatement.executeQuery();
-                if (rs.next()) {
+                final var resultSet = preparedStatement.executeQuery();
+                if (resultSet.next()) {
                     // Found entry
-                    String filename = rs.getString("cachedFile");
-                    return Paths.get(filename);
+                    return Paths.get(resultSet.getString("cachedFile"));
                 }
 
             } catch (SQLException ex) {
@@ -120,13 +119,13 @@ public class Cache {
         if (hash != null) {
             try {
                 // Delete any existing cached file
-                String sql = "SELECT cachedFile FROM cachedfiles WHERE filename=?";
-                PreparedStatement prepStatement = con.prepareStatement(sql);
+		var sql = "SELECT cachedFile FROM cachedfiles WHERE filename=?";
+		var prepStatement = con.prepareStatement(sql);
                 prepStatement.setString(1, file.toFile().getAbsolutePath());
                 // execute select SQL statement
-                ResultSet rs = prepStatement.executeQuery();
-                if (rs.next()) {
-                    String filename = rs.getString("cachedFile");
+                final var resultSet = prepStatement.executeQuery();
+                if (resultSet.next()) {
+                    final var filename = resultSet.getString("cachedFile");
                     System.out.println("Delete old cached file " + filename);
                     new File(filename).delete();
                 }
@@ -135,7 +134,7 @@ public class Cache {
                 // Update the entry with the new file
                 sql = "INSERT OR REPLACE INTO cachedfiles(filename, sha256, cachedfile) VALUES(?,?,?)";
                 prepStatement = con.prepareStatement(sql);
-                File outputFile = makeOutputFile();
+                final var outputFile = makeOutputFile();
                 prepStatement.setString(1, file.toFile().getAbsolutePath());
                 prepStatement.setString(2, hash);
                 prepStatement.setString(3, outputFile.getAbsolutePath());
@@ -152,15 +151,15 @@ public class Cache {
      * Create the database table if it does not exist
      */
     private void createTable() {
-        String sql = "CREATE TABLE IF NOT EXISTS cachedfiles ("
-                + "	filename TEXT NOT NULL PRIMARY KEY,"
-                + "	sha256 TEXT NOT NULL,"
-                + "	cachedfile TEXT NOT NULL"
-                + ");";
+        final var sql = "CREATE TABLE IF NOT EXISTS cachedfiles ("
+	    + "	filename TEXT NOT NULL PRIMARY KEY,"
+	    + "	sha256 TEXT NOT NULL,"
+	    + "	cachedfile TEXT NOT NULL"
+	    + ");";
         try {
-            Statement stmt = con.createStatement();
-            stmt.closeOnCompletion();
-            stmt.execute(sql);
+            final var statement = con.createStatement();
+            statement.closeOnCompletion();
+            statement.execute(sql);
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
@@ -175,8 +174,8 @@ public class Cache {
         if (counter > 99999) {
             counter = 0;
         }
-        String filename = String.format("%s-%05d.jpg",
-                simpleDateFormat.format(new Date()), counter);
+        final var filename = String.format("%s-%05d.jpg",
+					   simpleDateFormat.format(new Date()), counter);
         return new File(String.format("%s%s%02d", CACHE_DIRECTORY,
                 File.separator, (counter++ % 100)), filename);
     }
@@ -186,26 +185,26 @@ public class Cache {
      * the speed up.
      */
     public void clean() {
-        ElapsedTime elapsedTime = new ElapsedTime();
+        final var elapsedTime = new ElapsedTime();
         System.out.println();
         System.out.println("Clean cache");
-        final File directory = new File(CACHE_DIRECTORY);
-        SortedSet<String> filesInDatabase = new TreeSet<>();
-        ResultSet rs = null;
+        final var directory = new File(CACHE_DIRECTORY);
+        final SortedSet<String> filesInDatabase = new TreeSet<>();
+        ResultSet resultSet = null;
         try {
-            String sql = "SELECT cachedFile FROM cachedfiles ORDER BY cachedFile";
-            Statement queryStatement = con.createStatement();
+            final var sql = "SELECT cachedFile FROM cachedfiles ORDER BY cachedFile";
+            final var queryStatement = con.createStatement();
             queryStatement.closeOnCompletion();
-            rs = queryStatement.executeQuery(sql);
-            while (rs.next()) {
-                filesInDatabase.add(rs.getString(1));
+            resultSet = queryStatement.executeQuery(sql);
+            while (resultSet.next()) {
+                filesInDatabase.add(resultSet.getString(1));
             }
         } catch (SQLException ex) {
             Logger.getLogger(Cache.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             try {
-                if (rs != null && !rs.isClosed()) {
-                    rs.close();
+                if (resultSet != null && !resultSet.isClosed()) {
+                    resultSet.close();
                 }
             } catch (SQLException ex) {
                 Logger.getLogger(Cache.class.getName()).log(Level.SEVERE, null, ex);
@@ -213,13 +212,13 @@ public class Cache {
         }
 
         // Check for files in the database but not in the cache directory
-        SortedSet<String> inputFiles = getFiles(directory);
+        final var inputFiles = getFiles(directory);
         PreparedStatement preparedStatement = null;
         try {
-            String sql = "DELETE FROM cachedfiles WHERE cachedFile = ?";
+            final var sql = "DELETE FROM cachedfiles WHERE cachedFile = ?";
             preparedStatement = con.prepareStatement(sql);
 
-            for (String fileInDatabase : filesInDatabase) {
+            for (var fileInDatabase : filesInDatabase) {
                 if (inputFiles.contains(fileInDatabase)) {
                     // File exists in database and in the cache directory
                 } else {
@@ -233,8 +232,8 @@ public class Cache {
             Logger.getLogger(Cache.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             try {
-                if (rs != null && !rs.isClosed()) {
-                    rs.close();
+                if (resultSet != null && !resultSet.isClosed()) {
+                    resultSet.close();
                 }
                 if (preparedStatement != null) {
                     preparedStatement.close();
@@ -245,7 +244,7 @@ public class Cache {
         }
 
         // Check for files in the cache directory but not in the database
-        for (String file : inputFiles) {
+        for (var file : inputFiles) {
             if (filesInDatabase.contains(file)) {
                 // File exists in cache directory and in the database
             } else {
@@ -264,7 +263,7 @@ public class Cache {
      */
     private SortedSet<String> getFiles(File directory) {
         SortedSet<String> returnSet = new TreeSet<>();
-        for (File file : getFilesList(directory)) {
+        for (var file : getFilesList(directory)) {
             returnSet.add(file.getAbsolutePath());
         }
         return returnSet;
@@ -278,7 +277,7 @@ public class Cache {
      */
     private List<File> getFilesList(File directory) {
         List<File> files = new LinkedList<>();
-        for (File fileEntry : directory.listFiles()) {
+        for (var fileEntry : directory.listFiles()) {
             if (fileEntry.isDirectory()) {
                 files.addAll(getFilesList(fileEntry));
             } else if (!fileEntry.getName().equals("framcache.db")) {
@@ -310,7 +309,7 @@ public class Cache {
      * Create a file in the cache directory - just for test purpose
      */
     public void createTestFile() {
-        File outputFile = makeOutputFile();
+        final var outputFile = makeOutputFile();
 
         System.out.println("Create cached file " + outputFile);
         try {
@@ -324,9 +323,9 @@ public class Cache {
      * Create a database entry - just for test purposes
      */
     public void createTestEntry() {
-        File outputFile = makeOutputFile();
+        final var outputFile = makeOutputFile();
         System.out.println("Create dummy cache database entry " + outputFile);
-        String sql = "INSERT OR REPLACE INTO cachedfiles(filename, sha256, cachedfile) VALUES(?,?,?)";
+        final var sql = "INSERT OR REPLACE INTO cachedfiles(filename, sha256, cachedfile) VALUES(?,?,?)";
         PreparedStatement pstmt = null;
         try {
             // Update the entry with the new file
@@ -354,9 +353,9 @@ public class Cache {
      * @param directory directory tree root
      */
     private static void deleteDir(File directory) {
-        File[] directoryContents = directory.listFiles();
+        final var directoryContents = directory.listFiles();
         if (directoryContents != null) {
-            for (File fileInDirectory : directoryContents) {
+            for (var fileInDirectory : directoryContents) {
                 // Don't follow symbolic links
                 if (!Files.isSymbolicLink(fileInDirectory.toPath())) {
                     deleteDir(fileInDirectory);

@@ -28,7 +28,7 @@ public class OutputFileIndexGenerator {
 
         int number;
         // Randomize the order of the photographs
-        int randomNumber = getRandom();
+        var randomNumber = getRandom();
         int countdown = 30;
         while (usedIndices.contains(randomNumber)) {
             if (countdown-- == 0) {

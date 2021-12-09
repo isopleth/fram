@@ -21,15 +21,15 @@ public class ManipulateImage {
      * @return the modified image
      */
     public static BufferedImage mirror(BufferedImage image) {
-        int width = image.getWidth();
-        int height = image.getHeight();
-        BufferedImage newImage = new BufferedImage(width * 2, height,
-                BufferedImage.TYPE_3BYTE_BGR);
-        Graphics2D gb = (Graphics2D) newImage.getGraphics();
-        AffineTransform tx = AffineTransform.getScaleInstance(-1, 1);
+        final var width = image.getWidth();
+        final var height = image.getHeight();
+	var newImage = new BufferedImage(width * 2, height,
+					       BufferedImage.TYPE_3BYTE_BGR);
+        final var gb = (Graphics2D) newImage.getGraphics();
+        final var tx = AffineTransform.getScaleInstance(-1, 1);
         tx.translate(-width, 0);
-        AffineTransformOp op = new AffineTransformOp(tx,
-                AffineTransformOp.TYPE_NEAREST_NEIGHBOR);
+        final var op = new AffineTransformOp(tx,
+					     AffineTransformOp.TYPE_NEAREST_NEIGHBOR);
         newImage = op.filter(image, null);
         gb.drawImage(newImage, 0, 0, null);
         return newImage;
@@ -44,9 +44,9 @@ public class ManipulateImage {
      */
     public static BufferedImage resizeImage(BufferedImage image, int newWidth) {
 
-        int newHeight = image.getHeight() * newWidth / image.getWidth();
-        BufferedImage resizedImage = new BufferedImage(newWidth, newHeight, image.getType());
-        Graphics2D graphics2d = resizedImage.createGraphics();
+        final var newHeight = image.getHeight() * newWidth / image.getWidth();
+        final var resizedImage = new BufferedImage(newWidth, newHeight, image.getType());
+        final var graphics2d = resizedImage.createGraphics();
         graphics2d.drawImage(image, 0, 0, newWidth, newHeight, null);
         graphics2d.dispose();
         graphics2d.setComposite(AlphaComposite.Src);
@@ -82,7 +82,7 @@ public class ManipulateImage {
             newImage = new BufferedImage(image.getWidth(), image.getHeight(), 
                     BufferedImage.TYPE_3BYTE_BGR);
         }
-        Graphics2D graphics = (Graphics2D) newImage.getGraphics();
+        final var graphics = (Graphics2D) newImage.getGraphics();
         graphics.rotate(sign * Math.toRadians(rightAngles * 90), 
                 newImage.getWidth() / 2, newImage.getHeight() / 2);
         graphics.translate((newImage.getWidth() - image.getWidth()) / 2, 
@@ -100,9 +100,9 @@ public class ManipulateImage {
      */
     public static BufferedImage make3ByteBgr(BufferedImage image) {
         // Convert monochrome etc images to 3 byte BGR
-        BufferedImage newImage = new BufferedImage(image.getHeight(), 
-                image.getWidth(), BufferedImage.TYPE_3BYTE_BGR);
-        Graphics2D graphics = (Graphics2D) newImage.getGraphics();
+        final var newImage = new BufferedImage(image.getHeight(), 
+					       image.getWidth(), BufferedImage.TYPE_3BYTE_BGR);
+        final var graphics = (Graphics2D) newImage.getGraphics();
         graphics.drawImage(image, 0, 0, image.getHeight(), image.getWidth(), null);
         graphics.dispose();
         return newImage;

@@ -89,8 +89,8 @@ public class Configuration {
      * @return error message
      */
     public String getErrorMessage() {
-        String message = errorMessage.toString();
-        errorMessage = new StringBuilder();
+        final var message = errorMessage.toString();
+        errorMessage.setLength(0);
         return message;
     }
 

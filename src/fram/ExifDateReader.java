@@ -35,12 +35,12 @@ public class ExifDateReader {
      * @return true if successful, false if list empty
      */
     public String getDate() {
-        String date = "";
+        var date = "";
 
         try {
 
-            Metadata metadata = JpegMetadataReader.readMetadata(file.toFile());
-            Iterable<Directory> directories = metadata.getDirectories();
+            final var metadata = JpegMetadataReader.readMetadata(file.toFile());
+            final var directories = metadata.getDirectories();
             for (Directory directory : directories) {
 
                 if (directory != null) {
@@ -53,11 +53,11 @@ public class ExifDateReader {
             }
             if (date != null && !date.isEmpty()) {
                 // format is yyyy:mm:dd hh:mm:ss
-                String fields[] = date.split(":");
+                final var fields = date.split(":");
                 if (fields.length >= 3) {
                     // Day of month has hour at the end of it
-                    String splitString[] = fields[2].split(" ");
-                    String dayOfMonth = "";
+                    final var splitString = fields[2].split(" ");
+                    var dayOfMonth = "";
                     if (splitString.length > 1) {
                         dayOfMonth = splitString[0];
                     }

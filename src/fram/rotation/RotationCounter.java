@@ -39,9 +39,9 @@ public class RotationCounter {
      * @return counts as a string - just used for testing
      */
     static public String getRotationCounts() {
-        int[] counts = new int[Orientation.values().length];
+        final var counts = new int[Orientation.values().length];
         int index = 0;
-        for (Orientation orientation : Orientation.values()) {
+        for (var orientation : Orientation.values()) {
             if (rotationCounts.containsKey(orientation)) {
                 counts[index++] = rotationCounts.get(orientation);
             } else {
@@ -61,9 +61,9 @@ public class RotationCounter {
         if (counts.length != Orientation.values().length) {
             return "bad length";
         }
-        String returnValue = "";
+        var returnValue = "";
         int index = 0;
-        for (Orientation orientation : Orientation.values()) {
+        for (var orientation : Orientation.values()) {
             if (index > 0) {
                 returnValue += " ";
             }

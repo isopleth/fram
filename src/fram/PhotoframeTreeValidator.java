@@ -75,8 +75,8 @@ public class PhotoframeTreeValidator implements FileVisitor<Path> {
     @Override
     public FileVisitResult visitFile(Path file, 
             BasicFileAttributes attrs) throws IOException {
-        String filename = file.getName(file.getNameCount() - 1).toString();
-        boolean ok = false;
+        final var filename = file.getName(file.getNameCount() - 1).toString();
+        var ok = false;
         if (filename.matches("\\d+\\.jpg")) {
             ok = true;
         } else if (filename.equals("Thumbs.db")) {
