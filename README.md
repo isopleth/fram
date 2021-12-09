@@ -45,9 +45,7 @@ directory.
 
 It also optionally has a cache directory where it caches files from
 each run, so that it does not have to process every single image again
-when it runs, only the files that have changed. I have tens of
-thousands of photos and it runs on a really slow computer so without
-caching takes several hours in my case.
+when it runs, only the files that have changed.
 
 ## Excluding files
 
@@ -105,13 +103,14 @@ to display in any directory.  The directories have numeric names, such
 as 000010, 000011, etc.  Within them, the files also have numeric
 names such as 000001.jpg, 000002.jpg
 
-IF the output directory tree only contains files with these names (and
+If the output directory tree only contains files with these names (and
 thumbs.db) then the entire tree is deleted before the new images are
 put into the tree.  If the tree contains any file which doesn't match
 this name then the tree is not deleted.
 
 The program currently supports about a million image files, although
-in practice I use it with a few tens of thousands.
+in practice I use it with about forty thousand.  I need to set the
+Java heap size with this number of files to 1 GB using -Xmx1024m.
 
 The image is copied into the output directory tree and the original
 containing directory written at the top of the output image.
@@ -179,7 +178,7 @@ level fram directory and run `ant`.  It will build the code if
 necessary and run the unit tests.  To force it to rebuild everything
 run `ant clean` first.
 
-On Ubuntu (19.04), these are the ant and ant-optional packages.  And
+On Ubuntu (21.10, these are the ant and ant-optional packages.  And
 you will need the Java runtime library.  I wrote this all using the
 [Netbeans IDE](https://netbeans.apache.org/), so you might want to
 install that too.
