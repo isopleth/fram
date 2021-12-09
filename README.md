@@ -178,7 +178,7 @@ level fram directory and run `ant`.  It will build the code if
 necessary and run the unit tests.  To force it to rebuild everything
 run `ant clean` first.
 
-On Ubuntu (21.10, these are the ant and ant-optional packages.  And
+On Ubuntu (21.10), these are the ant and ant-optional packages.  And
 you will need the Java runtime library.  I wrote this all using the
 [Netbeans IDE](https://netbeans.apache.org/), so you might want to
 install that too.
