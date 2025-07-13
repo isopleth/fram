@@ -22,7 +22,6 @@ class PhotoframeFileFilter implements FilenameFilter {
      */
     @Override
     public boolean accept(File file, String string) {
-        final var matcher = regularExpression.matcher(string);
-        return matcher.find();
+        return regularExpression.matcher(string).find();
     }
 }

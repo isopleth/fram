@@ -19,12 +19,13 @@ import java.util.logging.Logger;
  * 1.005 - Add --showIndex
  * 1.006 - Clear --cache if --showIndex is set
  * 1.007 - Display heap size when program runs.  Start migration to JDK 11
+ * 1.008 - Delete lock file if more tha n a month old
  *
  * @author Jason Leake
  */
 public class Fram {
 
-    private static final String VERSION = "1.007";
+    private static final String VERSION = "1.008";
     private static final Logger logger = Logger.getLogger(Fram.class.getName());
     private ProcessFiles processFiles;
 

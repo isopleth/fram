@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.Date;
 
 /**
  * See if the program is already running.  Uses a lock file
@@ -19,6 +20,18 @@ class RunningLock {
      * Constructor
      */
     public RunningLock() {
+
+	// Delete lock file if it is more than a month old.  Probably means program crashed.
+	if (lockFile.exists()) {
+            var oneMonthAgo = new Date(System.currentTimeMillis() - (30L * 24 * 60 * 60 * 1000));
+            if (new Date(lockFile.lastModified()).before(oneMonthAgo)) {
+                System.out.println("Deleting lock file as it is more than a month old");
+		if (!delete()) {
+		    System.out.println("Could not delete lock file");
+		}
+	    }
+	}
+	    
         if (!lockFile.exists()) {
             try {
                 lockFile.createNewFile();
@@ -41,9 +54,10 @@ class RunningLock {
 
    /**
     * Delete lock
+    * @return success or failure
     */
-    void delete() {
-        lockFile.delete();
+    boolean delete() {
+        return lockFile.delete();
     }
 
 }
