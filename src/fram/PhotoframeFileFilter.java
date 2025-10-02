@@ -2,7 +2,6 @@ package fram;
 
 import java.io.File;
 import java.io.FilenameFilter;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**

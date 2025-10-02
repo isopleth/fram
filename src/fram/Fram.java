@@ -4,11 +4,16 @@ import fram.filesystem.ProcessFiles;
 import fram.rotation.RotationCounter;
 import java.io.File;
 import java.util.Locale;
-import java.util.logging.Logger;
 
 /**
- * Copies .jpg files onto a memory stick for displaying on a photo frame device.
- *
+ * Annotate photographs for display in a digital photoframe.
+ * 
+ * This is a program for preparing the files for a digital photo
+ * frame. These devices show a stream of photographs loaded from a memory
+ * stick, changing the photo every few seconds or minutes. The simpler
+ * ones just read the memory stick and display the photos, whilst the
+ * more complicated ones are based on tablets.
+ * 
  * Version history:
  *
  * 1.000 - Original
@@ -19,14 +24,20 @@ import java.util.logging.Logger;
  * 1.005 - Add --showIndex
  * 1.006 - Clear --cache if --showIndex is set
  * 1.007 - Display heap size when program runs.  Start migration to JDK 11
- * 1.008 - Delete lock file if more tha n a month old
+ * 1.008 - Delete lock file if more than a month old
+ * 1.009 - Tidying up the code
  *
  * @author Jason Leake
+ * 
+ * To compile and test the code:
+ * 
+ * ant test
+ * 
+ * Then check the output in test_data/testOutput
  */
 public class Fram {
 
-    private static final String VERSION = "1.008";
-    private static final Logger logger = Logger.getLogger(Fram.class.getName());
+    private static final String VERSION = "1.009";
     private ProcessFiles processFiles;
 
     /**
@@ -111,7 +122,7 @@ public class Fram {
             return runMainProgram(input, output, options);
 
         } finally {
-            lock.delete();
+            lock.deleteLock();
         }
     }
 

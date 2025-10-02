@@ -1,6 +1,5 @@
 package fram;
 
-import java.io.InputStream;
 import java.util.Scanner;
 
 /**

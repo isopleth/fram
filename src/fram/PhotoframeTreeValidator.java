@@ -89,6 +89,14 @@ public class PhotoframeTreeValidator implements FileVisitor<Path> {
         return FileVisitResult.CONTINUE;
     }
 
+    /**
+     * Called if file visit fails.  Returns CONTINUE so that the tree walk
+     * continues
+     * @param file file visit that failed
+     * @param exc I/O exception that prevented the file from being visited
+     * @return CONTINUE always
+     * @throws IOException 
+     */
     @Override
     public FileVisitResult visitFileFailed(Path file, 
             IOException exc) throws IOException {

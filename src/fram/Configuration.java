@@ -16,7 +16,7 @@ public class Configuration {
 
     private File inputDirectory;
     private File outputDirectory;
-    private StringBuilder errorMessage = new StringBuilder();
+    private final StringBuilder errorMessage = new StringBuilder();
     private Options options;
 
     /**

@@ -84,7 +84,7 @@ class Walker implements FileVisitor<Path> {
             while (fileCopier.copy()) {
                 if (++copyCount % 100 == 0) {
                     System.out.println(String.format("%d files copied at %s",
-                            copyCount, DateAndTimeNow.getNewline()));
+                            copyCount, DateAndTimeNow.withNewline()));
                 }
             }
         }
@@ -183,7 +183,7 @@ class Walker implements FileVisitor<Path> {
 
     /**
      * Read the files which need to be excluded from the files copied. This list
-     * is help in the specified file. current directory
+     * is held in the specified file's directory
      *
      * @param file exclusion list
      */

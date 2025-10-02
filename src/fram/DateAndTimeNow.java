@@ -14,7 +14,7 @@ public class DateAndTimeNow {
      *
      * @return current date
      */
-    public static String getNewline() {
+    public static String withNewline() {
         return get() + "\n";
     }
 
