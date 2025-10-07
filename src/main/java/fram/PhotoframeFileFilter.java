@@ -1,0 +1,27 @@
+package fram;
+
+
+import java.io.File;
+import java.io.FilenameFilter;
+import java.util.regex.Pattern;
+
+/**
+ * Filter for image file types. At the moment we just want jpegs.
+ *
+ * @author Jason Leake
+ */
+class PhotoframeFileFilter implements FilenameFilter {
+
+    private final Pattern regularExpression = Pattern.compile("^\\d\\d\\d\\d\\d\\d.jpg$");
+
+    /**
+     * Test if this filename should be used
+     * @param file file to check
+     * @param string
+     * @return true if this is a valid photoframe output filename
+     */
+    @Override
+    public boolean accept(File file, String string) {
+        return regularExpression.matcher(string).find();
+    }
+}
