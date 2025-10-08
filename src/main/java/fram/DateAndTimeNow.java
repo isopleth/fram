@@ -1,6 +1,5 @@
 package fram;
 
-
 import java.util.Date;
 
 /**

@@ -3,7 +3,7 @@
 
     <modelVersion>4.0.0</modelVersion>
     <groupId>Fram</groupId>
-    <artifactId>fram</artifactId>
+    <artifactId>Fram</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
@@ -23,7 +23,7 @@
                     <archive>
                         <manifest>
                             <addClasspath>true</addClasspath>
-                            <mainClass>Fram</mainClass>
+                            <mainClass>fram.Fram</mainClass>
                         </manifest>
                     </archive>
                     <descriptorRefs>
