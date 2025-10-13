@@ -1,6 +1,5 @@
 package fram;
 
-
 /**
  * Elapsed time
  *

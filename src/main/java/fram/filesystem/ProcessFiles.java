@@ -2,8 +2,8 @@ package fram.filesystem;
 
 import fram.Cache;
 import fram.CheckProgramNeedsRunning;
-import fram.Configuration;
-import fram.Options.Option;
+import fram.CmdLineOptions;
+import fram.CmdLineOptions.OptionEnum;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -15,7 +15,7 @@ import java.util.logging.Logger;
  */
 public class ProcessFiles {
 
-    private final Configuration theConfiguration;
+    private final CmdLineOptions commandLine;
     private Walker walker;
     private CheckProgramNeedsRunning checker = null;
 
@@ -24,8 +24,8 @@ public class ProcessFiles {
      *
      * @param configuration Configuration data
      */
-    public ProcessFiles(Configuration configuration) {
-        theConfiguration = configuration;
+    public ProcessFiles(CmdLineOptions configuration) {
+        commandLine = configuration;
     }
 
     /**
@@ -33,9 +33,9 @@ public class ProcessFiles {
      */
     public void run() {
         var runTheMainProgramCode = false;
-        if (theConfiguration.isSet(Option.CHECK)) {
+        if (commandLine.isSet(OptionEnum.CHECK)) {
             try {
-                checker = new CheckProgramNeedsRunning(theConfiguration);
+                checker = new CheckProgramNeedsRunning(commandLine);
                 if (checker.changed()) {
                     runTheMainProgramCode = true;
                 }
@@ -48,12 +48,12 @@ public class ProcessFiles {
 
         if (runTheMainProgramCode) {
             try {
-                deleteExistingFiles(theConfiguration.getOutputDirectory());
+                deleteExistingFiles(commandLine.outputDirectoryRoot);
                 Cache cache = null;
-                if (theConfiguration.isSet(Option.CACHE)) {
+                if (commandLine.isSet(OptionEnum.CACHE)) {
                     cache = new Cache();
                 }
-                walker = new Walker(theConfiguration, cache);
+                walker = new Walker(commandLine, cache);
                 walker.process(true);
                 walker.writeExclusionListFile();
                 walker.process(false);

@@ -1,15 +1,16 @@
 package fram.filesystem;
 
 import fram.Cache;
-import fram.Configuration;
 import fram.DateAndTimeNow;
-import fram.Options.Option;
+import fram.CmdLineOptions;
+import fram.CmdLineOptions.OptionEnum;
 import fram.OutputFileIndexGenerator;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.FileSystems;
 import java.nio.file.FileVisitResult;
 import java.nio.file.FileVisitor;
 import java.nio.file.Files;
@@ -42,7 +43,7 @@ class Walker implements FileVisitor<Path> {
     private int skippedCount = 0;
     private int skippedDirCount = 0;
     private final OutputFileIndexGenerator outputFileIndexGenerator;
-    private final Configuration theConfiguration;
+    private final CmdLineOptions theCommandLine;
 
     private final static String EXCLUDE_WHOLE_DIRECTORY_FILENAME
             = "_photoframe_exclude.txt";
@@ -54,14 +55,14 @@ class Walker implements FileVisitor<Path> {
     /**
      * Constructor
      *
-     * @param configuration command line options etc
+     * @param commandLineOptions command line options etc
      * @param cache file cache
      */
-    public Walker(Configuration configuration, Cache cache) {
-        theConfiguration = configuration;
+    public Walker(CmdLineOptions commandLineOptions, Cache cache) {
+        theCommandLine = commandLineOptions;
         outputFileIndexGenerator = new OutputFileIndexGenerator();
-        fileCopier = new FileCopier(configuration, 
-                cache, configuration.isSet(Option.VERBOSE));
+        fileCopier = new FileCopier(commandLineOptions,
+                cache, commandLineOptions.isSet(OptionEnum.VERBOSE));
     }
 
     /**
@@ -73,13 +74,14 @@ class Walker implements FileVisitor<Path> {
      */
     public void process(boolean buildList) throws IOException {
         this.buildTheList = buildList;
+        var inputPath = FileSystems.getDefault().getPath(theCommandLine.inputdirectoryRoot);
         if (buildTheList) {
             excludeDirectoryList.clear();
             System.out.println("Scanning directory tree");
-            Files.walkFileTree(theConfiguration.getInputPath(), this);
+            Files.walkFileTree(inputPath, this);
         } else {
             System.out.println("Copying files");
-            Files.walkFileTree(theConfiguration.getInputPath(), this);
+            Files.walkFileTree(inputPath, this);
             fileCopier.compactOutputFiles();
             while (fileCopier.copy()) {
                 if (++copyCount % 100 == 0) {

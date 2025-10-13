@@ -21,7 +21,7 @@ import java.util.logging.Logger;
 public class Hash {
 
     private static MessageDigest digest = null;
-    private static Configuration theConfiguration;
+    private static CmdLineOptions commandLine;
     private static final String CLASSNAME = Hash.class.getName();
 
     /**
@@ -30,8 +30,8 @@ public class Hash {
      * @param config program configuration
      * @throws NoSuchAlgorithmException exception thrown if SHA-256 hash is not available
      */
-    public Hash(Configuration config) throws NoSuchAlgorithmException {
-        theConfiguration = config;
+    public Hash(CmdLineOptions config) throws NoSuchAlgorithmException {
+        commandLine = config;
         if (digest == null) {
             digest = MessageDigest.getInstance("SHA-256");
         } else {
@@ -70,7 +70,7 @@ public class Hash {
 
             // Add in the width setting.  If this has changed then
             // the output file might need to be regenerated
-            byteBuffer = ByteBuffer.allocate(4).putInt(theConfiguration.getMinimumWidth());
+            byteBuffer = ByteBuffer.allocate(4).putInt(commandLine.getMinimumWidth());
             byte[] minimumWidthArray = byteBuffer.array();
             digest.update(minimumWidthArray, 0, minimumWidthArray.length);
 

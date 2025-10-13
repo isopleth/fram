@@ -8,6 +8,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.FileSystems;
 import java.nio.file.FileVisitResult;
 import java.nio.file.FileVisitor;
 import java.nio.file.Files;
@@ -26,7 +27,7 @@ import java.util.logging.Logger;
  */
 final public class CheckProgramNeedsRunning implements FileVisitor<Path> {
 
-    private final Configuration theConfiguration;
+    private final CmdLineOptions theCommandLine;
     private int count = 0;
     private String newText;
     private boolean changedFlag = false;
@@ -35,12 +36,12 @@ final public class CheckProgramNeedsRunning implements FileVisitor<Path> {
     /**
      * Constructor
      *
-     * @param configuration program configuration - command line options etc
+     * @param commandLine program configuration - command line options etc
      * @throws java.io.IOException thrown if getInputDirectory() fails
      */
-    public CheckProgramNeedsRunning(Configuration configuration) throws IOException {
-        theConfiguration = configuration;
-        checkFile = generateName(configuration.getInputDirectory());
+    public CheckProgramNeedsRunning(CmdLineOptions commandLine) throws IOException {
+        theCommandLine = commandLine;
+        checkFile = generateName(commandLine.inputdirectoryRoot);
     }
 
     /**
@@ -53,7 +54,7 @@ final public class CheckProgramNeedsRunning implements FileVisitor<Path> {
 
         System.out.println("See if program needs to regenerate output files");
         try {
-            Files.walkFileTree(theConfiguration.getInputPath(), this);
+            Files.walkFileTree(FileSystems.getDefault().getPath(theCommandLine.inputdirectoryRoot), this);
         } catch (IOException ex) {
             Logger.getLogger(CheckProgramNeedsRunning.class.getName()).log(Level.SEVERE, null, ex);
         }

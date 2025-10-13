@@ -3,7 +3,7 @@
 import fram.Cache;
 import fram.CheckProgramNeedsRunning;
 import fram.Fram;
-import fram.Options;
+import fram.CmdLineOptions;
 import fram.rotation.RotationCounter;
 import java.io.File;
 import java.io.IOException;
@@ -165,7 +165,6 @@ public class FramTest {
         System.out.println();
         for (var count = 0; count < title.length(); count++) {
             System.out.print("-");
-
         }
         System.out.println();
         System.out.println(title);
@@ -266,7 +265,7 @@ public class FramTest {
         subAnnounce("Run program. Files will be regenerated since nothing to compare against");
         var fram = new Fram();
         fram.runProgram(new String[]{inputDirectory, outputDirectory, "--verbose",
-            "--check", "--minimumwidth=1024"});
+            "--check", "--minimumWidth=1024"});
         assertTrue("Renegerated files", fram.getProcessor().getChecker().getChangedFlag());
         for (var file : getOutputFiles()) {
             try {
@@ -285,7 +284,7 @@ public class FramTest {
         subAnnounce("Run program again. Should be regenerated");
         fram = new Fram();
         fram.runProgram(new String[]{inputDirectory, outputDirectory, "--verbose",
-            "--check", "--minimumwidth=4024"});
+            "--check", "--minimumWidth=4024"});
         for (var file : getOutputFiles()) {
             try {
                 int imageWidth = getImageWidth(file);
@@ -349,8 +348,8 @@ public class FramTest {
         var fram = new Fram();
         fram.runProgram(new String[]{inputDirectory, outputDirectory,
             "--verbose", "--cache", "--showIndex"});
-        assertTrue("Cache suppressed", !fram.options.isSet(Options.Option.CACHE)
-                && fram.options.isSet(Options.Option.SHOW_INDEX));
+        assertTrue("Cache suppressed", !fram.commandLine.isSet(CmdLineOptions.OptionEnum.CACHE)
+                && fram.commandLine.isSet(CmdLineOptions.OptionEnum.SHOW_INDEX));
     }
 
     /**

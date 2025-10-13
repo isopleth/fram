@@ -29,7 +29,7 @@ class DirectoryAdder implements FileVisitor<Path> {
     /**
      *
      * @param directory
-     * @param bfa
+     * @param bfa basic file attributes
      * @return CONTINUE always
      * @throws IOException
      */

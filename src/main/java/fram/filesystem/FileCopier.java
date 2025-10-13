@@ -9,11 +9,11 @@ import com.drew.metadata.Metadata;
 import com.drew.metadata.MetadataException;
 import com.drew.metadata.exif.ExifIFD0Directory;
 import fram.Cache;
-import fram.Configuration;
+import fram.CmdLineOptions;
+import fram.CmdLineOptions.OptionEnum;
 import fram.ExifDateReader;
 import fram.Hash;
 import fram.ManipulateImage;
-import fram.Options.Option;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
@@ -41,7 +41,7 @@ import javax.imageio.ImageIO;
  */
 public class FileCopier {
 
-    private Configuration theConfiguration;
+    private CmdLineOptions commandLine;
     private SortedMap<Integer, Path> fileMap = new TreeMap<>();
     private BufferedWriter copyListFile;
     private static final Logger logger = Logger.getLogger(FileCopier.class.getName());
@@ -53,13 +53,13 @@ public class FileCopier {
     /**
      * Constructor
      *
-     * @param configuration configuration settings
+     * @param commandLineOptions configuration settings
      * @param cache file cache
      * @param copylist true to log the file copy
      */
-    public FileCopier(Configuration configuration, Cache cache, boolean copylist) {
+    public FileCopier(CmdLineOptions commandLineOptions, Cache cache, boolean copylist) {
         theCache = cache;
-        theConfiguration = configuration;
+        commandLine = commandLineOptions;
         if (copylist) {
             try {
                 copyListFile = new BufferedWriter(new FileWriter(COPY_LIST_FILE));
@@ -156,12 +156,12 @@ public class FileCopier {
         String hash = null;
         if (theCache != null) {
             try {
-                hash = new Hash(theConfiguration).generate(originalFile.toFile());
+                hash = new Hash(commandLine).generate(originalFile.toFile());
                 Path cachedFile = theCache.getCachedFile(originalFile, hash);
                 if (cachedFile != null) {
                     // There is a cached file all ready so no need to process
                     // the original file
-                    if (theConfiguration.isSet(Option.VERBOSE)) {
+                    if (commandLine.isSet(OptionEnum.VERBOSE)) {
                         System.out.println("Copying cached file to " + outputFile);
                         copyFile(cachedFile, photoframeOutputFile);
                     }
@@ -180,7 +180,7 @@ public class FileCopier {
             BufferedImage image = ImageIO.read(imagePath);
 
             // Rotate the image if necessary
-            if (!theConfiguration.isSet(Option.NO_ROTATE_IMAGES)) {
+            if (!commandLine.isSet(OptionEnum.NO_ROTATE_IMAGES)) {
                 Orientation imageOrientation = getOrientation(originalFile);
                 switch (imageOrientation) {
 
@@ -226,7 +226,7 @@ public class FileCopier {
 
             // Remove any border around the image if necessary.  This is not
             // yet fully implemented
-            if (theConfiguration.isSet(Option.REMOVE_BORDER)) {
+            if (commandLine.isSet(OptionEnum.REMOVE_BORDER)) {
                 BorderProcessor borderProcessor = new BorderProcessor(image);
                 if (borderProcessor.hasBorder()) {
                     image = borderProcessor.removeBorder();
@@ -234,7 +234,7 @@ public class FileCopier {
 
             }
 
-            final int minimumWidth = theConfiguration.getMinimumWidth();
+            final int minimumWidth = commandLine.getMinimumWidth();
             if (width < minimumWidth) {
                 image = ManipulateImage.resizeImage(image, minimumWidth);
             }
@@ -243,7 +243,7 @@ public class FileCopier {
 
             double size = image.getHeight() * ANNOTATION_SIZE;
 
-            if (theConfiguration.isSet(Option.NO_DIRECTORY_NAME)) {
+            if (commandLine.isSet(OptionEnum.NO_DIRECTORY_NAME)) {
                 double xoffset = image.getHeight() * ANNOTATION_SIZE;
                 double yoffset = image.getHeight() * ANNOTATION_SIZE;
                 graphics2d.setFont(new Font("TimesRoman",
@@ -256,19 +256,19 @@ public class FileCopier {
             }
 
             String indexText = "";
-            if (theConfiguration.isSet(Option.SHOW_FILENAME)) {
+            if (commandLine.isSet(OptionEnum.SHOW_FILENAME)) {
                 // Want debugging info on image
                 indexText = originalFile.getFileName().toString();
             }
 
-            if (theConfiguration.isSet(Option.SHOW_INDEX)) {
+            if (commandLine.isSet(OptionEnum.SHOW_INDEX)) {
                 if (!indexText.isBlank()) {
                     indexText += " ";
                 }
                 indexText += String.format("%06d", index);
             }
 
-            if (theConfiguration.isSet(Option.SHOW_DATE)) {
+            if (commandLine.isSet(OptionEnum.SHOW_DATE)) {
                 String theDate = new ExifDateReader(originalFile).getDate();
                 if (!theDate.isEmpty()) {
                     if (!indexText.isBlank()) {
@@ -287,7 +287,7 @@ public class FileCopier {
                 graphics2d.setFont(new Font("TimesRoman", Font.PLAIN, (int) size / 2));
                 graphics2d.drawString(indexText, (int) x, (int) y);
             }
-            if (theConfiguration.isSet(Option.VERBOSE)) {
+            if (commandLine.isSet(OptionEnum.VERBOSE)) {
                 System.out.println("Writing " + outputFile);
             }
             ImageIO.write(image, "jpg", outputFile);
@@ -339,13 +339,9 @@ public class FileCopier {
     private Path convertIndexToDest(int index) {
         String outputFilename = String.format("%06d.jpg", index);
         String subdirectory = getSubDirectory(index);
-        try {
-            return Paths.get(theConfiguration.getOutputDirectory(subdirectory),
-                    outputFilename);
-        } catch (IOException ex) {
-            logger.log(Level.SEVERE, null, ex);
-        }
-        return null;
+        return Paths.get(commandLine.outputDirectoryRoot,
+                subdirectory,
+                outputFilename);
     }
 
     /**
