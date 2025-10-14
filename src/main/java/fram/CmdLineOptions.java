@@ -2,14 +2,11 @@ package fram;
 
 import java.io.IOException;
 import static java.lang.System.exit;
-import java.nio.file.Path;
 import org.apache.commons.cli.help.HelpFormatter;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
@@ -24,12 +21,13 @@ import org.apache.commons.cli.ParseException;
  */
 public class CmdLineOptions {
 
-    public String inputdirectoryRoot;
-    public String outputDirectoryRoot;
-    Set<OptionEnum> optionsSet = new HashSet<>();
+    public final String inputDirectoryRoot;
+    public final String outputDirectoryRoot;
+    public final String extraExclusionFile;
 
+    private Set<OptionEnum> optionsSet = new HashSet<>();
     private static final boolean DEBUG = false;
-    Options options = new Options();
+    private Options options = new Options();
     private CommandLine cmd;
     int minimumWidth = 900;
 
@@ -43,7 +41,8 @@ public class CmdLineOptions {
     }
 
     /**
-     * Command line options null null null null null null null null null null null     {@link #VERBOSE}
+     * Command line options null null null null null null null null null null
+     * null null null     {@link #VERBOSE}
      * {@link #CHECK}
      * {@link #SHOW_INDEX}
      * {@link #SHOW_FILENAME}
@@ -60,9 +59,13 @@ public class CmdLineOptions {
          */
         VERBOSE,
         /**
-         *
+         * Check if program needs rerunning before starting major processing
          */
         CHECK,
+        /**
+         * An additional image exclusion filename has been specified
+         */
+        EXTRA_EXCLUSION_FILE,
         /**
          * Print index number on each photo
          */
@@ -104,6 +107,11 @@ public class CmdLineOptions {
      * @param args Command line arguments
      */
     public CmdLineOptions(String[] args) {
+
+        String inputDirectory = "";
+        String outputDirectory = "";
+        String extraExclusionName = "";
+
         // These are the command line options that are recognised
         var cacheOption = Option.builder("c").longOpt("cache").desc("Use cache").get();
         var checkOption = Option.builder("e").longOpt("check").desc("Only run main processing if number of input files changed").get();
@@ -117,12 +125,15 @@ public class CmdLineOptions {
         var showIndexOption = Option.builder("i").longOpt("showIndex").desc("Show output file index number").get();
         var verboseOption = Option.builder("v").longOpt("verbose").desc("Describe what is happening").get();
         var helpOption = Option.builder("h").longOpt("help").desc("Show help").get();
+        var extraExclusionFileOption = Option.builder("x").longOpt("extraExclusion").desc("Recognise extra directory exclusion files").
+                hasArg().argName("exclusionFile").get();
 
         Map<Option, OptionEnum> optionMapping = new HashMap<>();
 
         put(options, optionMapping, cacheOption, OptionEnum.CACHE);
         put(options, optionMapping, checkOption, OptionEnum.CHECK);
         put(options, optionMapping, dateOption, OptionEnum.SHOW_DATE);
+        put(options, optionMapping, extraExclusionFileOption, OptionEnum.EXTRA_EXCLUSION_FILE);
         put(options, optionMapping, minimumWidthOption, OptionEnum.MINIMUM_WIDTH);
         put(options, optionMapping, noDirectoryOption, OptionEnum.NO_DIRECTORY_NAME);
         put(options, optionMapping, noRotateOption, OptionEnum.NO_ROTATE_IMAGES);
@@ -152,8 +163,14 @@ public class CmdLineOptions {
                 exit(1);
             }
 
-            inputdirectoryRoot = remainingArgs[0];
-            outputDirectoryRoot = remainingArgs[1];
+            if (remainingArgs.length < 2) {
+
+                inputDirectory = "";
+                outputDirectory = "";
+            } else {
+                inputDirectory = remainingArgs[0];
+                outputDirectory = remainingArgs[1];
+            }
             // Fetch remaining arguments
             for (String arg : cmd.getArgList()) {
                 System.out.println("Additional argument: " + arg);
@@ -166,13 +183,24 @@ public class CmdLineOptions {
                 }
             }
 
+            if (cmd.hasOption(extraExclusionFileOption)) {
+                extraExclusionName = cmd.getParsedOptionValue(extraExclusionFileOption);
+            } else {
+                extraExclusionName = "";
+            }
+
         } catch (ParseException e) {
             System.out.println("Error parsing command-line arguments: " + e.getMessage());
             exit(1);
         } catch (IOException e) {
             System.out.println("I/O exception processing command-line arguments: " + e.getMessage());
             exit(1);
+        } finally {
+            inputDirectoryRoot = inputDirectory;
+            outputDirectoryRoot = outputDirectory;
+            extraExclusionFile = extraExclusionName;
         }
+
     }
 
     /**

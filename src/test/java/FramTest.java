@@ -1,5 +1,4 @@
 
-
 import fram.Cache;
 import fram.CheckProgramNeedsRunning;
 import fram.Fram;
@@ -102,8 +101,10 @@ public class FramTest {
      * Run the main method of the program
      *
      * @param args arguments to pass to method
+     * @param expectedFilesIn set of expected files, or null if the default set
+     * of 10 is expected
      */
-    private void run(String[] args) {
+    private void run(String[] args, Set<String> expectedFilesIn) {
         try {
             assertTrue("Run program", new Fram().runProgram(args));
             var outputDir = new File(outputDirectory);
@@ -116,25 +117,29 @@ public class FramTest {
             File[] listOfFiles = createdDir.listFiles();
 
             // Check all of the expected output files are present.
-            Set<String> expectedfiles = new HashSet<>();
-            for (var index = 0; index < 10; index++) {
-                expectedfiles.add(String.format("%06d.jpg", index));
+            Set<String> expectedFiles;
+            if (expectedFilesIn == null) {
+                expectedFiles = new HashSet<>();
+                for (var index = 0; index < 10; index++) {
+                    expectedFiles.add(String.format("%06d.jpg", index));
+                }
+            } else {
+                expectedFiles = new HashSet<>(expectedFilesIn);
             }
 
             for (var file : listOfFiles) {
                 if (file.isFile()) {
                     assertTrue(String.format("%s exists", file.getName()),
-                            expectedfiles.contains(file.getName()));
-                    expectedfiles.remove(file.getName());
+                            expectedFiles.contains(file.getName()));
+                    expectedFiles.remove(file.getName());
                 }
             }
-            assertTrue("No missing files", expectedfiles.isEmpty());
+            assertTrue("No missing files", expectedFiles.isEmpty());
 
             // Now remove the output files next time we run a test
             testHasBeenRun = true;
         } catch (Exception ex) {
             assertTrue(ex.getLocalizedMessage(), false);
-            ex.printStackTrace();
         }
     }
 
@@ -195,14 +200,16 @@ public class FramTest {
      */
     @Test
     public void testCache() {
-        announce("test cache");
+        announce("Test cache");
         Cache.deleteCache();
         subAnnounce("Run program with caching but no cache");
-        run(new String[]{inputDirectory, outputDirectory, "--verbose", "--cache"});
+        run(new String[]{inputDirectory, outputDirectory, "--verbose", "--cache"},
+                null);
         int[] counts = {9, 0, 0, 0, 1, 0, 0, 0, 0};
         checkRotations(counts);
         subAnnounce("Run program with caching but cache exists");
-        run(new String[]{inputDirectory, outputDirectory, "--verbose", "--cache"});
+        run(new String[]{inputDirectory, outputDirectory, "--verbose", "--cache"},
+                null);
         // Nothing will be rotated because the files all come from the cache
         int[] counts1 = {0, 0, 0, 0, 0, 0, 0, 0, 0};
         checkRotations(counts1);
@@ -220,9 +227,10 @@ public class FramTest {
      */
     @Test
     public void testNoCache() {
-        announce("test no cache");
+        announce("Test no cache");
         // Run program without caching
-        run(new String[]{inputDirectory, outputDirectory, "--verbose"});
+        run(new String[]{inputDirectory, outputDirectory, "--verbose"},
+                null);
         int[] counts = {9, 0, 0, 0, 1, 0, 0, 0, 0};
         checkRotations(counts);
     }
@@ -232,7 +240,7 @@ public class FramTest {
      */
     @Test
     public void testCheckOption() {
-        announce("test check output directory needs regenerating");
+        announce("Test check output directory needs regenerating");
         subAnnounce("Delete check file, if it exists");
         var name = CheckProgramNeedsRunning.generateName(inputDirectory);
         var checkFile = new File(System.getProperty("user.dir"), name);
@@ -240,13 +248,13 @@ public class FramTest {
 
         subAnnounce("Run program. Files will be regenerated since nothing to compare against");
         var fram = new Fram();
-        fram.runProgram(new String[]{inputDirectory, outputDirectory, 
+        fram.runProgram(new String[]{inputDirectory, outputDirectory,
             "--verbose", "--check"});
         assertTrue("Renegerated files", fram.getProcessor().getChecker().getChangedFlag());
 
         subAnnounce("Run program again. Should not need regenerating");
         fram = new Fram();
-        fram.runProgram(new String[]{inputDirectory, outputDirectory, 
+        fram.runProgram(new String[]{inputDirectory, outputDirectory,
             "--verbose", "--check"});
         assertFalse("Renegerated files", fram.getProcessor().getChecker().getChangedFlag());
     }
@@ -306,7 +314,7 @@ public class FramTest {
      */
     @Test
     public void testShowFilenameOption() {
-        announce("test show filename option");
+        announce("Test show filename option");
         subAnnounce("Delete check file, if it exists");
         var name = CheckProgramNeedsRunning.generateName(inputDirectory);
         var checkFile = new File(System.getProperty("user.dir"), name);
@@ -314,7 +322,7 @@ public class FramTest {
 
         subAnnounce("Run program. Files should be regenerated since no check file present.");
         var fram = new Fram();
-        fram.runProgram(new String[]{inputDirectory, outputDirectory, 
+        fram.runProgram(new String[]{inputDirectory, outputDirectory,
             "--verbose", "--check", "--showFilename"});
         assertTrue("Renegerated files", fram.getProcessor().getChecker().getChangedFlag());
     }
@@ -325,7 +333,7 @@ public class FramTest {
      */
     @Test
     public void testIndexOption() {
-        announce("test show index number option");
+        announce("Test show index number option");
         subAnnounce("Delete check file, if it exists");
         var name = CheckProgramNeedsRunning.generateName(inputDirectory);
         var checkFile = new File(System.getProperty("user.dir"), name);
@@ -342,7 +350,7 @@ public class FramTest {
      */
     @Test
     public void testShowIndexCache() {
-        announce("test show index suppresses the cache option");
+        announce("Test show index suppresses the cache option");
         subAnnounce("Delete check file, if it exists");
 
         var fram = new Fram();
@@ -350,6 +358,20 @@ public class FramTest {
             "--verbose", "--cache", "--showIndex"});
         assertTrue("Cache suppressed", !fram.commandLine.isSet(CmdLineOptions.OptionEnum.CACHE)
                 && fram.commandLine.isSet(CmdLineOptions.OptionEnum.SHOW_INDEX));
+    }
+
+    /**
+     * Test operation of --extraExclusion
+     */
+    @Test
+    public void testExtraExcludedFiles() {
+        announce("Test extra included files");
+        Set<String> expectedFiles = new HashSet<>();
+        for (var index = 0; index < 6; index++) {
+            expectedFiles.add(String.format("%06d.jpg", index));
+        }
+        run(new String[]{inputDirectory, outputDirectory,
+            "--verbose", "--extraExclusion=exclude.txt"}, expectedFiles);
     }
 
     /**

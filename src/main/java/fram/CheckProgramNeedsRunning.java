@@ -41,7 +41,7 @@ final public class CheckProgramNeedsRunning implements FileVisitor<Path> {
      */
     public CheckProgramNeedsRunning(CmdLineOptions commandLine) throws IOException {
         theCommandLine = commandLine;
-        checkFile = generateName(commandLine.inputdirectoryRoot);
+        checkFile = generateName(commandLine.inputDirectoryRoot);
     }
 
     /**
@@ -54,7 +54,7 @@ final public class CheckProgramNeedsRunning implements FileVisitor<Path> {
 
         System.out.println("See if program needs to regenerate output files");
         try {
-            Files.walkFileTree(FileSystems.getDefault().getPath(theCommandLine.inputdirectoryRoot), this);
+            Files.walkFileTree(FileSystems.getDefault().getPath(theCommandLine.inputDirectoryRoot), this);
         } catch (IOException ex) {
             Logger.getLogger(CheckProgramNeedsRunning.class.getName()).log(Level.SEVERE, null, ex);
         }

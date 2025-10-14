@@ -33,7 +33,7 @@ import java.util.Locale;
  */
 public class Fram {
 
-    private static final String VERSION = "1.009";
+    private static final String VERSION = "1.010";
     private ProcessFiles processFiles;
 
     /**

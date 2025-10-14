@@ -74,7 +74,7 @@ class Walker implements FileVisitor<Path> {
      */
     public void process(boolean buildList) throws IOException {
         this.buildTheList = buildList;
-        var inputPath = FileSystems.getDefault().getPath(theCommandLine.inputdirectoryRoot);
+        var inputPath = FileSystems.getDefault().getPath(theCommandLine.inputDirectoryRoot);
         if (buildTheList) {
             excludeDirectoryList.clear();
             System.out.println("Scanning directory tree");
@@ -128,11 +128,16 @@ class Walker implements FileVisitor<Path> {
         if (buildTheList) {
             // If we are building the list then ignore the file unless it is
             // one of the exclusion list files
-            if (file.getFileName().toString().equals(EXCLUDE_WHOLE_DIRECTORY_FILENAME)) {
+            var filename = file.getFileName().toString();
+            if (filename.equals(EXCLUDE_WHOLE_DIRECTORY_FILENAME)) {
                 // Add this directory and all its sub-directories
                 Files.walkFileTree(file.getParent(), new DirectoryAdder(excludeDirectoryList));
-            } else if (file.getFileName().toString().equals(EXCLUDE_SPECIFIC_FILES_FILENAME)) {
-                readExcludefiles(file);
+            } else if (filename.equals(EXCLUDE_SPECIFIC_FILES_FILENAME)) {
+                readExcludeFile(file);
+            } else if (theCommandLine.isSet(OptionEnum.EXTRA_EXCLUSION_FILE)
+                    && filename.equals(theCommandLine.extraExclusionFile)) {
+                // Add this directory and all its sub-directories
+                Files.walkFileTree(file.getParent(), new DirectoryAdder(excludeDirectoryList));
             }
         } else {
             // Otherwise process the file.  Ignore anything which isn't a .jpg
@@ -184,18 +189,18 @@ class Walker implements FileVisitor<Path> {
     }
 
     /**
-     * Read the files which need to be excluded from the files copied. This list
+     * Read the files which need to be excluded from the files copied.This list
      * is held in the specified file's directory
      *
-     * @param file exclusion list
+     * @param exclusionFile exclusion list file
      */
-    private void readExcludefiles(Path file) {
+    private void readExcludeFile(Path exclusionFile) {
         BufferedReader reader = null;
         try {
-            reader = new BufferedReader(new FileReader(file.toFile()));
+            reader = new BufferedReader(new FileReader(exclusionFile.toFile()));
             var line = reader.readLine();
             while (line != null) {
-                final var dir = file.getParent();
+                final var dir = exclusionFile.getParent();
                 final var skipFile = Paths.get(dir.toString(), line);
                 excludeFileList.add(skipFile);
                 System.out.println(String.format("Skip file %s", skipFile.toString()));
@@ -246,23 +251,22 @@ class Walker implements FileVisitor<Path> {
      */
     public void writeExclusionListFile() {
         try {
-            final var out = new BufferedWriter(new FileWriter("exclusion_list.txt"));
-            SortedSet<Path> sortedSet = new TreeSet<>();
-            sortedSet.addAll(excludeDirectoryList);
-            for (var path : sortedSet) {
-                out.write("directory " + path.toString() + "\n");
-            }
+            try (java.io.BufferedWriter out = new BufferedWriter(new FileWriter("exclusion_list.txt"))) {
+                SortedSet<Path> sortedSet = new TreeSet<>();
+                sortedSet.addAll(excludeDirectoryList);
+                for (var path : sortedSet) {
+                    out.write("directory " + path.toString() + "\n");
+                }
 
-            sortedSet.clear();
-            sortedSet.addAll(excludeFileList);
-            for (var path : sortedSet) {
-                out.write("file " + path.toString() + "\n");
+                sortedSet.clear();
+                sortedSet.addAll(excludeFileList);
+                for (var path : sortedSet) {
+                    out.write("file " + path.toString() + "\n");
+                }
             }
-
-            out.close();
-        } catch (IOException e) {
+        } catch (IOException ex) {
+              Logger.getLogger(CLASSNAME).log(Level.SEVERE, null, ex);
         }
-
     }
 
 }
