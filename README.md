@@ -134,6 +134,11 @@ then the date, if any, will have been written by the device which
 scanned the photos and so will not relate to the date that the picture
 was taken.
 
+`--maximumWidth <width>`
+
+Maximum width of output images in pixels.  The images are resized to this
+width.
+
 `--noDirectory`
 
 Suppressing adding the directory name text to the output file.
@@ -150,7 +155,7 @@ This adds text to the bottom left corner of the output images which
 specifies their original filenames.  It is useful for tracking down an
 image which needs modifying or fixing in some way.
 
-'--showIndex'
+`--showIndex`
 
 This adds test to the bottom left corner of the output images which
 specifies the numeric index of the file, i.e. the output filename
