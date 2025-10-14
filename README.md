@@ -172,4 +172,8 @@ too.
 
 ## Building
 
-Just run Maven (mvn).
+Just run Maven:
+
+mvn package
+
+
