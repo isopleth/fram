@@ -15,25 +15,29 @@ import java.util.Locale;
  *
  * Version history:
  *
- * 1.000 - Original 1.001 - Cache and unit tests know about 1.002 - Allow user
- * to set minimum image size 1.003 - Add some changes for detecting borders
- * around photos 1.004 - Fix --showFilename, display command line 1.005 - Add
- * --showIndex 1.006 - Clear --cache if --showIndex is set 1.007 - Display heap
- * size when program runs. Start migration to JDK 11 1.008 - Delete lock file if
- * more than a month old 1.009 - Tidying up the code 1.010 - Change from Ant to
- * Maven
+ * 1.000 - Original 1.001 - Cache and unit tests know about
+ * 1.002 - Allow user to set minimum image size
+ * 1.003 - Add some changes for detecting borders around photos
+ * 1.004 - Fix --showFilename, display command line
+ * 1.005 - Add --showIndex
+ * 1.006 - Clear --cache if --showIndex is set
+ * 1.007 - Display heap size when program runs. Start migration to JDK 11
+ * 1.008 - Delete lock file if more than a month old
+ * 1.009 - Tidying up the code
+ * 1.010 - Change from Ant to Maven
+ * 1.011 - Fix --noDirectory being enabled by default
  *
  * @author Jason Leake
  *
  * To compile and test the code:
  *
- * ant test
+ * mvn test
  *
  * Then check the output in test_data/testOutput
  */
 public class Fram {
 
-    private static final String VERSION = "1.010";
+    private static final String VERSION = "1.011";
     private ProcessFiles processFiles;
 
     /**

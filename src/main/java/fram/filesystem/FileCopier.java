@@ -181,7 +181,7 @@ public class FileCopier {
 
             // Rotate the image if necessary
             if (!commandLine.isSet(OptionEnum.NO_ROTATE_IMAGES)) {
-                Orientation imageOrientation = getOrientation(originalFile);
+                var imageOrientation = getOrientation(originalFile);
                 switch (imageOrientation) {
 
                     case NONE:
@@ -227,7 +227,7 @@ public class FileCopier {
             // Remove any border around the image if necessary.  This is not
             // yet fully implemented
             if (commandLine.isSet(OptionEnum.REMOVE_BORDER)) {
-                BorderProcessor borderProcessor = new BorderProcessor(image);
+                var borderProcessor = new BorderProcessor(image);
                 if (borderProcessor.hasBorder()) {
                     image = borderProcessor.removeBorder();
                 }
@@ -239,11 +239,11 @@ public class FileCopier {
                 image = ManipulateImage.resizeImage(image, minimumWidth);
             }
 
-            Graphics2D graphics2d = image.createGraphics();
+            final var graphics2d = image.createGraphics();
 
             double size = image.getHeight() * ANNOTATION_SIZE;
 
-            if (commandLine.isSet(OptionEnum.NO_DIRECTORY_NAME)) {
+            if (!commandLine.isSet(OptionEnum.NO_DIRECTORY_NAME)) {
                 double xoffset = image.getHeight() * ANNOTATION_SIZE;
                 double yoffset = image.getHeight() * ANNOTATION_SIZE;
                 graphics2d.setFont(new Font("TimesRoman",

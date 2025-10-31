@@ -41,8 +41,8 @@ public class CmdLineOptions {
     }
 
     /**
-     * Command line options null null null null null null null null null null
-     * null null null     {@link #VERBOSE}
+     * Command line options
+     * {@link #VERBOSE}
      * {@link #CHECK}
      * {@link #SHOW_INDEX}
      * {@link #SHOW_FILENAME}
